@@ -4,10 +4,10 @@
       <el-tabs v-model="activeName" @tab-click="handleClick">
         <el-tab-pane label="播放列表" name="playList">
           <div flex text-stone-400 pb-2 mx-2 my-3 border-b border-t-0 border-l-0 border-r-0>
-            <div flex-1>
+            <div flex-1 ml-4>
               共{{ musicQueue.length }}首
             </div>
-            <div text-orange-700 float-right cursor-pointer @click="clear">
+            <div mr-4 text-orange-700 float-right cursor-pointer @click="clear">
               清空列表
             </div>
           </div>
@@ -20,20 +20,25 @@
                 :class="{'active-item':music.id==currentMusicInfo.id}"
                 @dblclick="queueDoubleClick(music)"
               >
-                <div v-show="showPlayIcon(music)" w="0.875rem" h="0.875rem" overflow-hidden flex absolute left="5px">
-                  <div bg-orange-700 w-1 mx-px h-full class="playingIcon1" />
-                  <div bg-orange-700 w-1 mx-px h-full class="playingIcon2" />
-                  <div bg-orange-700 w-1 mx-px h-full class="playingIcon3" />
-                </div>
-                <span :class="{'':isMusicPaused && music.id===currentMusicInfo.id}" />
-                <span w="40%" mx-6 overflow-hidden text-ellipsis whitespace-nowrap>{{ music.name }}</span>
-
-                <div w="43.3%" overflow-hidden text-ellipsis whitespace-nowrap text-sky-600>
-                  <span v-for="(artist ,i) in music.artists" :key="i" @click.stop="toArtist(artist.id)">{{ artist.name }}&nbsp;</span>
-                </div>
-
-                <span w="16.7">{{ music.time }}</span>
-                <span class="queue-song-delete" @click="deleteQueue(music.id)">×</span>
+                <span flex w="92%">
+                  <div v-show="showPlayIcon(music)" w="0.875rem" h="0.875rem" overflow-hidden flex absolute left="5px">
+                    <div bg-orange-700 w-1 mx-px h-full class="playingIcon1" />
+                    <div bg-orange-700 w-1 mx-px h-full class="playingIcon2" />
+                    <div bg-orange-700 w-1 mx-px h-full class="playingIcon3" />
+                  </div>
+                  <span :class="{'':isPlaying && music.id===currentMusicInfo.id}" />
+                  <span w="35%" ml-6 px-1 overflow-hidden text-ellipsis whitespace-nowrap :title="music.name">{{ music.name }}</span>
+                  <span w="43.3%" cursor-pointer overflow-hidden text-ellipsis whitespace-nowrap text-sky-600 :title="artistsTitleString(music.artists)">
+                    <span v-for="(artist , i) in music.artists" :key="i">
+                      <span @click.stop="toArtist(artist.id)">{{ artist.name }}</span>
+                      <span v-if="music.artists.length != 1 && i != music.artists.length - 1" text-gray-600 cursor-default>&nbsp;&amp;&nbsp;</span>
+                    </span>
+                  </span>
+                  <span px-1 w="16.7">{{ music.time }}</span>
+                </span>
+                <span w="auto" text-center class="queue-song-delete" @click="deleteQueue(music.id)">
+                  <span i-ic-sharp-cancel />
+                </span>
               </li>
             </el-scrollbar>
           </ul>
@@ -60,6 +65,7 @@ import { useRouter } from 'vue-router'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { storeToRefs } from 'pinia'
 import usePlay from '@/hooks/usePlay'
+import { artistsTitleString } from '@/utils/common'
 import { useMusicInfoStore } from '@/store/MusicInfoStore'
 import { useMusicQueueStore } from '@/store/MusicQueueStore'
 import { usePlayStore } from '@/store/PlayStore'
@@ -71,12 +77,14 @@ const PLAY_STORE = usePlayStore()
 const { currentMusicInfo } = storeToRefs(MUSIC_INFO_STORE)
 const { nowIndex, musicQueue, deleteToNext } = storeToRefs(MUSIC_QUEUE_STORE)
 const { changQueueStyleTo, changeNowIndexTo, deleteMusicBy, clearMusicQueue, toggleDeleteToNext } = MUSIC_QUEUE_STORE
-const { isMusicPaused } = storeToRefs(PLAY_STORE)
+const { isPlaying } = storeToRefs(PLAY_STORE)
 
 const activeName = ref('playList')
 const { getMusicInfo, queueDoubleClick } = usePlay()
+
 function showPlayIcon(music: Music) {
-  return music.id === currentMusicInfo.value.id && !isMusicPaused.value
+  console.log(music.id, currentMusicInfo.value.id)
+  return music.id === currentMusicInfo.value.id && isPlaying.value
 }
 
 function handleClick(tab: any) {
@@ -228,7 +236,7 @@ function toArtist(id: number) {
   padding-bottom: 0.5rem;
   background-color: white;
   color: black;
-  cursor: pointer;
+  cursor: default;
 }
 
 .queue-item:nth-of-type(even) {
@@ -245,7 +253,7 @@ function toArtist(id: number) {
 }
 .queue-song-delete {
   cursor: pointer;
-  margin-right: 3rem;
+  margin-right: auto;
   color: rgb(168, 162, 158);
   display: none;
 }
