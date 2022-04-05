@@ -137,6 +137,12 @@ whenever(ended, () => {
   useToggle(ended)()
 })
 
+watch(playing, () => {
+  PLAY_STORE.$patch((state) => {
+    state.isPlaying = playing.value
+  })
+})
+
 // 音量处理
 const cacheVolume = ref(0.7)
 
