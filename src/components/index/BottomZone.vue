@@ -20,7 +20,7 @@
       </el-tooltip>
     </div>
     <transition name="fade">
-      <MusicQueue v-show="showQueue" ref="queue" @playing="showIcon" />
+      <MusicQueue v-show="showQueue" ref="queue" />
     </transition>
   </div>
 </template>
