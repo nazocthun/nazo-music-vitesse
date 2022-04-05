@@ -6,7 +6,7 @@ export const usePlayStore = defineStore({
     return {
       location: '',
       isMusicChanged: false,
-      isMusicPaused: true,
+      isPlaying: false,
     }
   },
   actions: {
