@@ -6,6 +6,7 @@ declare module 'vue' {
   export interface GlobalComponents {
     BottomZone: typeof import('./src/components/index/BottomZone.vue')['default']
     ElContainer: typeof import('element-plus/es')['ElContainer']
+    ElImage: typeof import('element-plus/es')['ElImage']
     ElInput: typeof import('element-plus/es')['ElInput']
     ElScrollbar: typeof import('element-plus/es')['ElScrollbar']
     ElSlider: typeof import('element-plus/es')['ElSlider']
@@ -16,12 +17,13 @@ declare module 'vue' {
     ElTooltip: typeof import('element-plus/es')['ElTooltip']
     Footer: typeof import('./src/components/Footer.vue')['default']
     Loading: typeof import('element-plus/es')['ElLoadingDirective']
+    LyricsPage: typeof import('./src/components/LyricsPage.vue')['default']
     MainPage: typeof import('./src/components/index/MainPage.vue')['default']
     MusicInfo: typeof import('./src/components/index/MusicInfo.vue')['default']
     MusicQueue: typeof import('./src/components/MusicQueue.vue')['default']
+    MusicTable: typeof import('./src/components/MusicTable.vue')['default']
     NavBar: typeof import('./src/components/index/NavBar.vue')['default']
     PlayControl: typeof import('./src/components/index/PlayControl.vue')['default']
-    PlayControlNew1: typeof import('./src/components/index/PlayControlNew1.vue')['default']
     SearchBox: typeof import('./src/components/index/SearchBox.vue')['default']
   }
 }
