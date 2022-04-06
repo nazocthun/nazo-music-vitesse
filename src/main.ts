@@ -7,7 +7,8 @@ import 'uno.css'
 import '@/styles/custom.scss'
 
 const app = createApp(App)
+const pinia = createPinia()
 
-app.use(router).use(createPinia())
+app.use(router).use(pinia)
 
 app.mount('#app')
