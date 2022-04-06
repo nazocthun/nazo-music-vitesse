@@ -10,6 +10,7 @@
     "test": "vitest"
   },
   "dependencies": {
+    "@iconify-json/mdi": "^1.1.8",
     "@types/lodash-es": "^4.17.6",
     "@vueuse/core": "^8.1.1",
     "axios": "^0.26.1",
