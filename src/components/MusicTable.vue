@@ -42,22 +42,29 @@
 
       <el-table-column v-if="props.album" prop="album" label="专辑" width="">
         <template #default="scope">
-          <span flex justify-start items-center :title="scope.row.album.name">
-            <span
-              flex-initial cursor-pointer text-sky-600 mr-auto pr-4 overflow-hidden text-ellipsis whitespace-nowrap
-              @click="toAlbum(scope.row.album.id)"
-            >
-              {{ scope.row.album.name }}
-            </span>
-            <span
-              flex float-right mr-4 cursor-pointer w-6 h-6 hover:text-orange-700
-              i-ic-sharp-playlist-add
-              @click="addToQueue(scope.row, 'plus')"
-            />
+          <span
+            :title="scope.row.album.name"
+            flex-initial cursor-pointer text-sky-600 mr-auto pr-4 overflow-hidden text-ellipsis whitespace-nowrap
+            @click="toAlbum(scope.row.album.id)"
+          >
+            {{ scope.row.album.name }}
           </span>
         </template>
       </el-table-column>
-      <el-table-column prop="time" label="时长" width="100" />
+      <el-table-column prop="add" label="" width="100">
+        <template #default="scope">
+          <span
+            flex float-right mr-4 cursor-pointer w-6 h-6 hover:text-orange-700
+            i-ic-sharp-playlist-add
+            @click="addToQueue(scope.row, 'plus')"
+          />
+        </template>
+      </el-table-column>
+      <el-table-column prop="time" label="时长" width="100">
+        <template #default="scope">
+          <span text-gray-600 cursor-default>{{ scope.row.time }}</span>
+        </template>
+      </el-table-column>
     </el-table>
   </div>
 </template>
