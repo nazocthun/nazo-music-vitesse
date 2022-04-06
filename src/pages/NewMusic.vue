@@ -8,24 +8,40 @@
         <el-tab-pane label="日语" name="8" />
         <el-tab-pane label="韩语" name="16" />
       </el-tabs>
-      <MusicTable :type="type" />
+      <MusicTable :data="tableData" :loading="loading" :pic="true" :album="true" />
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue'
+import { getNewMusic } from '@/api/getNewMusic'
 
 const activeName = ref('0')
-const type = ref(0)
+const params = reactive({
+  type: 0,
+  realIP: '116.25.146.177',
+})
+
+const tableData = ref<Array<Music>>()
+const loading = ref(true)
+
 function handleClick(tab: any) {
-  type.value = Number(activeName.value)
+  init()
 }
 
-</script>
+function init() {
+  loading.value = true
+  params.type = Number(activeName.value)
+  getNewMusic(params).then((res) => {
+    tableData.value = res
+  }).then(() => {
+    loading.value = false
+  })
+}
 
-<style scoped>
-/* .new-music :deep(.el-loading-spinner) {
-  top: 50%;
-} */
-</style>
+onMounted(() => {
+  init()
+})
+
+</script>
