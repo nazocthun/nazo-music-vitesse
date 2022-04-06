@@ -34,11 +34,9 @@
                       <span v-if="music.artists.length != 1 && i != music.artists.length - 1" text-gray-600 cursor-default>&nbsp;&amp;&nbsp;</span>
                     </span>
                   </span>
-                  <span px-1 w="16.7">{{ music.time }}</span>
+                  <span px-1 w="16.7%" text-right>{{ music.time }}</span>
                 </span>
-                <span w="auto" text-center class="queue-song-delete" @click="deleteQueue(music.id)">
-                  <span i-ic-sharp-cancel />
-                </span>
+                <span w="8%" i-ic-sharp-cancel class="queue-song-delete" @click="deleteQueue(music.id)" />
               </li>
             </el-scrollbar>
           </ul>
