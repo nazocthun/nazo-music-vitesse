@@ -1,6 +1,6 @@
 <template>
-  <div w="20%" min-w="380px" h="66%" fixed right-2 bottom-16 rounded-t-md bg-white box-border text-sm shadow-2xl>
-    <div h-full>
+  <div w="380px" h="550px" fixed right-2 bottom-16 rounded-t-md bg-white box-border text-sm shadow-2xl>
+    <div h="550px">
       <el-tabs v-model="activeName" @tab-click="handleClick">
         <el-tab-pane label="播放列表" name="playList">
           <div flex text-stone-400 pb-2 mx-2 my-3 border-b border-t-0 border-l-0 border-r-0>
@@ -11,8 +11,8 @@
               清空列表
             </div>
           </div>
-          <ul h-full relative p-0>
-            <el-scrollbar style="height:100%">
+          <ul h="430px" p-0>
+            <el-scrollbar height="430px">
               <li
                 v-for="music in musicQueue"
                 :key="music.id"
@@ -36,7 +36,20 @@
                   </span>
                   <span px-1 w="16.7%" text-right>{{ music.time }}</span>
                 </span>
-                <span w="8%" i-ic-sharp-cancel class="queue-song-delete" @click="deleteQueue(music.id)" />
+                <span
+                  v-if="!onDeleting.includes(music.id)"
+                  w="8%"
+                  i-ic-sharp-cancel
+                  class="queue-song-delete-icon"
+                  @click="onDeletingQueue(music.id)"
+                />
+                <span
+                  v-if="onDeleting.includes(music.id)"
+                  w="8%"
+                  i-ic-sharp-cancel
+                  class="queue-song-delete-confirm"
+                  @click="deleteQueue(music.id)"
+                />
               </li>
             </el-scrollbar>
           </ul>
@@ -74,19 +87,18 @@ const PLAY_STORE = usePlayStore()
 
 const { currentMusicInfo } = storeToRefs(MUSIC_INFO_STORE)
 const { nowIndex, musicQueue, deleteToNext } = storeToRefs(MUSIC_QUEUE_STORE)
-const { changQueueStyleTo, changeNowIndexTo, deleteMusicBy, clearMusicQueue, toggleDeleteToNext } = MUSIC_QUEUE_STORE
+const { changQueueStyleTo, changeNowIndexTo, deleteMusicBy, toggleDeleteToNext } = MUSIC_QUEUE_STORE
 const { isPlaying } = storeToRefs(PLAY_STORE)
 
 const activeName = ref('playList')
 const { getMusicInfo, queueDoubleClick } = usePlay()
 
 function showPlayIcon(music: Music) {
-  console.log(music.id, currentMusicInfo.value.id)
   return music.id === currentMusicInfo.value.id && isPlaying.value
 }
 
 function handleClick(tab: any) {
-  console.log(tab)
+  // console.log(tab)
 }
 
 function clear() {
@@ -105,7 +117,9 @@ function clear() {
   }).then(() => {
     MUSIC_INFO_STORE.$reset()
     setTimeout(() => {
-      clearMusicQueue()
+      MUSIC_INFO_STORE.$reset()
+      PLAY_STORE.$reset()
+      MUSIC_QUEUE_STORE.$reset()
     }, 100)
     ElMessage({
       type: 'success',
@@ -119,36 +133,44 @@ function clear() {
   })
 }
 
+const onDeleting = ref<Array<number>>([])
+
+function onDeletingQueue(id: number) {
+  onDeleting.value.push(id)
+  setTimeout(() => {
+    for (const [i, item] of onDeleting.value.entries()) {
+      if (item === id) {
+        onDeleting.value.splice(i, 1)
+        break
+      }
+    }
+  }, 3000)
+}
+
 function deleteQueue(id: number) { // TODO:
-  //   console.log(id)
-  ElMessageBox.confirm('确定删除该歌曲吗?', '提示', {
-    confirmButtonText: '确定',
-    cancelButtonText: '取消',
-    type: 'warning',
-  }).then(() => {
-    const ids = []
-    for (const item of musicQueue.value)
-      ids.push(item.id)
-    const indexOfId = ids.indexOf(id)
-    setTimeout(() => {
-      changQueueStyleTo('delete')
-      deleteMusicBy(id)
-      if (indexOfId < nowIndex.value) { // 删除的是当前播放之前的歌曲
-        changeNowIndexTo(nowIndex.value - 1)
+  const ids = []
+  for (const item of musicQueue.value)
+    ids.push(item.id)
+  const indexOfId = ids.indexOf(id)
+  setTimeout(() => {
+    changQueueStyleTo('delete')
+    deleteMusicBy(id)
+    if (indexOfId < nowIndex.value) { // 删除的是当前播放之前的歌曲
+      changeNowIndexTo(nowIndex.value - 1)
+    }
+    else if (indexOfId === nowIndex.value) { // 删除的是当前播放的歌曲
+      toggleDeleteToNext()
+    }
+    for (const [i, item] of onDeleting.value.entries()) {
+      if (item === id) {
+        onDeleting.value.splice(i, 1)
+        break
       }
-      else if (indexOfId === nowIndex.value) { // 删除的是当前播放的歌曲
-        toggleDeleteToNext()
-      }
-    }, 300)
-    setTimeout(() => {
-      changQueueStyleTo('normal')
-    }, 300)
-  }).catch(() => {
-    ElMessage({
-      type: 'info',
-      message: '已取消删除',
-    })
-  })
+    }
+  }, 300)
+  setTimeout(() => {
+    changQueueStyleTo('normal')
+  }, 300)
 }
 
 // 监视删除状态
@@ -167,10 +189,8 @@ watch(deleteToNext, () => {
     }, 100)
   }
   // 当前播放是队列最后一首，跳回第一首
-  if (nowIndex.value === musicQueue.value.length) {
-    console.log(nowIndex.value, musicQueue.value.length)
+  if (nowIndex.value === musicQueue.value.length)
     changeNowIndexTo(0)
-  }
 })
 
 watch(nowIndex, () => {
@@ -246,14 +266,20 @@ function toArtist(id: number) {
   color: rgb(2, 132, 199);
 }
 
-.queue-item:hover .queue-song-delete {
+.queue-item:hover .queue-song-delete-icon {
   display: block;
 }
-.queue-song-delete {
+.queue-song-delete-icon {
   cursor: pointer;
   margin-right: auto;
   color: rgb(168, 162, 158);
   display: none;
+}
+
+.queue-song-delete-confirm {
+  cursor: pointer;
+  margin-right: auto;
+  color: rgb(194, 65, 12);
 }
 
 .active-item {
