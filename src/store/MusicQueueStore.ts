@@ -29,10 +29,6 @@ export const useMusicQueueStore = defineStore({
           queue.splice(i, 1)
       }
     },
-    clearMusicQueue() {
-      this.nowIndex = 0
-      this.musicQueue = []
-    },
     toggleDeleteToNext() {
       this.deleteToNext = !this.deleteToNext
     },
