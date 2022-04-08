@@ -5,6 +5,7 @@
 declare module 'vue' {
   export interface GlobalComponents {
     BottomZone: typeof import('./src/components/index/BottomZone.vue')['default']
+    CoverLazy: typeof import('./src/components/CoverLazy.vue')['default']
     ElContainer: typeof import('element-plus/es')['ElContainer']
     ElImage: typeof import('element-plus/es')['ElImage']
     ElInput: typeof import('element-plus/es')['ElInput']
