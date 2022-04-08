@@ -91,7 +91,7 @@ const PLAY_STORE = usePlayStore()
 
 const { currentMusicUrl } = storeToRefs(MUSIC_INFO_STORE)
 const { musicQueue, nowIndex } = storeToRefs(MUSIC_QUEUE_STORE)
-const { isMusicChanged } = storeToRefs(PLAY_STORE)
+const { isMusicChanged, isPlaying } = storeToRefs(PLAY_STORE)
 
 const { prevQueue, nextQueue } = useMusicQueue()
 
@@ -105,11 +105,19 @@ const audioTime = ref()
 function log() {
   console.log(playing.value, currentTime.value, duration.value, currentMusicUrl.value)
 }
-
 // 播放控制
 const { getMusicInfo } = usePlay()
 function play() {
-  useToggle(playing)()
+  if (musicQueue.value.length !== 0) {
+    getMusicInfo(musicQueue.value[nowIndex.value], 'queue')
+    useToggle(playing)()
+    return
+  }
+  ElMessage({
+    message: '队列中没有音乐',
+    type: 'warning',
+    showClose: true,
+  })
 }
 
 function stop() {
@@ -141,6 +149,10 @@ watch(playing, () => {
   PLAY_STORE.$patch((state) => {
     state.isPlaying = playing.value
   })
+})
+
+watch(isPlaying, () => {
+  playing.value = isPlaying.value
 })
 
 // 音量处理
