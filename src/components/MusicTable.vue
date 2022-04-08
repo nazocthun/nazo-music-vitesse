@@ -4,16 +4,16 @@
       <el-table-column type="index" width="50" />
       <el-table-column v-if="props.pic" width="100">
         <template #default="scope">
-          <div w-16 h-16 relative>
+          <div class="group" w-16 h-16 relative>
             <img absolute w-full h-full rounded-xl class="table-cover-img" :src="scope.row.picUrl">
             <div
               absolute justify-center items-center cursor-pointer
               w-8 h-8 top="50%" left="50%" translate-x="-50%" translate-y="-50%"
-              m-0 bg="white/80" rounded-full
+              m-0 bg="white/70" rounded-full group-hover="bg-white transition-all"
               @click="getMusicInfo(scope.row, 'doubleclick')"
             >
               <div
-                w-full h-full bg-orange-700
+                w-full h-full bg-orange-700 opacity-70 group-hover="opacity-100 transition-all"
                 i-ic-sharp-play-circle-outline
               />
             </div>
