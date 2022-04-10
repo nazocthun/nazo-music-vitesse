@@ -4,7 +4,7 @@
 
 declare module 'vue' {
   export interface GlobalComponents {
-    BottomZone: typeof import('./src/components/index/BottomZone.vue')['default']
+    BottomZone: typeof import('./src/components/Footer/BottomZone.vue')['default']
     CoverLazy: typeof import('./src/components/CoverLazy.vue')['default']
     ElContainer: typeof import('element-plus/es')['ElContainer']
     ElImage: typeof import('element-plus/es')['ElImage']
@@ -16,16 +16,15 @@ declare module 'vue' {
     ElTabPane: typeof import('element-plus/es')['ElTabPane']
     ElTabs: typeof import('element-plus/es')['ElTabs']
     ElTooltip: typeof import('element-plus/es')['ElTooltip']
-    Footer: typeof import('./src/components/Footer.vue')['default']
     Loading: typeof import('element-plus/es')['ElLoadingDirective']
-    LyricsPage: typeof import('./src/components/LyricsPage.vue')['default']
-    MainPage: typeof import('./src/components/index/MainPage.vue')['default']
-    MusicInfo: typeof import('./src/components/index/MusicInfo.vue')['default']
+    LyricsPage: typeof import('./src/pages/Lyrics/LyricsPage.vue')['default']
+    MainPage: typeof import('./src/components/MainPage/MainPage.vue')['default']
+    MusicInfo: typeof import('./src/components/Footer/MusicInfo.vue')['default']
     MusicQueue: typeof import('./src/components/MusicQueue.vue')['default']
     MusicTable: typeof import('./src/components/MusicTable.vue')['default']
-    NavBar: typeof import('./src/components/index/NavBar.vue')['default']
-    PlayControl: typeof import('./src/components/index/PlayControl.vue')['default']
-    SearchBox: typeof import('./src/components/index/SearchBox.vue')['default']
+    NavBar: typeof import('./src/components/NavBar/NavBar.vue')['default']
+    PlayControl: typeof import('./src/components/Footer/PlayControl.vue')['default']
+    SearchBox: typeof import('./src/components/NavBar/SearchBox.vue')['default']
   }
 }
 

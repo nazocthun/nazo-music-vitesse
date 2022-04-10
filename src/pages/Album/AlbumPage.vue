@@ -6,7 +6,7 @@
       </div>
       <div px-5 py-0 flex-1>
         <div text-2xl font-bold flex items-center>
-          <div text-orange-700 border-solid border border-orange-700 inline-block text-xl mr-2 rounded px-2 py-0 cursor-default>
+          <div text-orange-700 border="~ solid orange-700" inline-block text-xl mr-2 rounded px-2 py-0 cursor-default>
             专辑
           </div>
           {{ albumInfo.name }}
@@ -39,7 +39,7 @@
           {{ item }}
         </p>
       </el-tab-pane>
-      <el-tab-pane label="评论" name="comment"  :lazy="true"/>
+      <el-tab-pane label="评论" name="comment" :lazy="true" />
     </el-tabs>
   </div>
 </template>
