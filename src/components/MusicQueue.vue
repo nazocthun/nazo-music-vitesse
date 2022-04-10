@@ -115,11 +115,11 @@ function clear() {
     cancelButtonText: '取消',
     type: 'warning',
   }).then(() => {
-    MUSIC_INFO_STORE.$reset()
+    MUSIC_INFO_STORE.reset()
     setTimeout(() => {
-      MUSIC_INFO_STORE.$reset()
-      PLAY_STORE.$reset()
-      MUSIC_QUEUE_STORE.$reset()
+      MUSIC_INFO_STORE.reset()
+      PLAY_STORE.reset()
+      MUSIC_QUEUE_STORE.resetQueue()
     }, 100)
     ElMessage({
       type: 'success',
@@ -180,13 +180,9 @@ watch(deleteToNext, () => {
     getMusicInfo(musicQueue.value[nowIndex.value], 'queue')
   // 队列中没有音乐重置
   if (musicQueue.value.length === 0) {
-    MUSIC_INFO_STORE.$reset()
-    PLAY_STORE.$reset()
-    // 如果打开歌词页面 则关闭
-    // this.$parent.show = true
-    setTimeout(() => {
-      MUSIC_QUEUE_STORE.$reset()
-    }, 100)
+    MUSIC_INFO_STORE.reset()
+    PLAY_STORE.reset()
+    MUSIC_QUEUE_STORE.resetQueue()
   }
   // 当前播放是队列最后一首，跳回第一首
   if (nowIndex.value === musicQueue.value.length)
