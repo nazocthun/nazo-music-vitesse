@@ -1,11 +1,11 @@
 <template>
-  <div v-loading="props.loading" class="music-table" w-full mx-auto>
+  <div v-loading="props.loading" w-full mx-auto>
     <el-table :data="tableData" stripe style="width: 100%" @row-dblclick="rowDoubleClick">
       <el-table-column type="index" width="50" />
       <el-table-column v-if="props.pic" width="100">
         <template #default="scope">
           <div class="group" w-16 h-16 relative>
-            <img absolute w-full h-full rounded-xl class="table-cover-img" :src="scope.row.picUrl">
+            <img absolute w-full h-full rounded-xl :src="scope.row.picUrl">
             <div
               absolute justify-center items-center cursor-pointer
               w-8 h-8 top="50%" left="50%" translate-x="-50%" translate-y="-50%"
