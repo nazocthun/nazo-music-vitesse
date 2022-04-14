@@ -1,6 +1,6 @@
 <template>
   <div>
-    HI
+    Discover Page
   </div>
 </template>
 
