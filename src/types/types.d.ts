@@ -80,3 +80,15 @@ declare interface similarArtistTypes {
 declare interface musicUrl {
   musicUrl: string
 }
+
+declare interface SongList {
+  id: number // 歌单id
+  name: string // 歌单名
+  picUrl?: string // 歌单封面url
+  userId: string // 创建者id
+  description?: string // 歌单描述
+  tags?: string[] // 歌单标签
+  trackCount: number // 歌曲数量
+  createTime: number // 创建时间
+  trackIds: number[]
+}
