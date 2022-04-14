@@ -17,7 +17,6 @@ declare module 'vue' {
     ElTabs: typeof import('element-plus/es')['ElTabs']
     ElTooltip: typeof import('element-plus/es')['ElTooltip']
     Loading: typeof import('element-plus/es')['ElLoadingDirective']
-    LyricsPage: typeof import('./src/pages/Lyrics/LyricsPage.vue')['default']
     MainPage: typeof import('./src/components/MainPage/MainPage.vue')['default']
     MusicInfo: typeof import('./src/components/Footer/MusicInfo.vue')['default']
     MusicQueue: typeof import('./src/components/MusicQueue.vue')['default']
