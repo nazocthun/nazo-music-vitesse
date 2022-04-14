@@ -20,16 +20,16 @@ export const convertAlbumInfo = async(res: AxiosResponse<any>): Promise<Album> =
       name: albumInfo.artist.name,
       picUrl: albumInfo.artist.picUrl,
     },
-    music: musicInfo.map((item: { id: any; name: any; ar: { id: any; name: any; dts: any }[]; dt: any }) => {
+    music: musicInfo.map((item: { id: any; name: any; ar: { id: any; name: any; alias: any }[]; dt: any }) => {
       return {
         id: item.id,
         name: item.name,
         picUrl: getCompressedImgUrl(albumInfo.picUrl, 500),
-        artists: item.ar.map((item: { id: any; name: any; dts: any }) => {
+        artists: item.ar.map((item: { id: any; name: any; alias: any }) => {
           return {
             id: item.id,
             name: item.name,
-            alias: item.dts,
+            alias: item.alias,
           }
         }),
         album: {
