@@ -9,6 +9,27 @@ const REQUEST_URL = {
   detail: '/playlist/detail',
 }
 
+export const convertSelectedSongList = async(res: AxiosResponse<any>): Promise<SongListWrapper> => {
+  const songListInfo = res.data.playlists
+  return {
+    songList: songListInfo.map((item: { name: any; id: any; coverImgUrl: string; trackCount: any }) => {
+      return {
+        name: item.name,
+        id: item.id,
+        picUrl: getCompressedImgUrl(item.coverImgUrl, 500),
+        trackCount: item.trackCount,
+      }
+    }),
+    lastTime: res.data.lasttime,
+    more: res.data.more,
+    total: res.data.total,
+  }
+}
+
+export const getSelectedSongList = (params = {}) => {
+  return getRequest(REQUEST_URL.selected, params).then(convertSelectedSongList)
+}
+
 export const convertSongListDetail = async(res: AxiosResponse<any>): Promise<SongList> => {
   const songListInfo = res.data.playlist
   return songListInfo.map((item: { id: any; name: any; coverImgUrl: string; userId: any; description: any; tags: any; trackCount: any; createTime: string | number | Date; trackIds: { id: any }[] }) => {
