@@ -3,7 +3,7 @@ declare interface Music {
   name: string // 歌曲名
   picUrl?: string // 专辑封面url
   alias?: string // 歌曲别名
-  artists: Artist[] // 艺人信息
+  artists: ArtistSimple[] // 艺人简单信息
   album?: { // 专辑信息
     id: number
     name: string
@@ -13,30 +13,12 @@ declare interface Music {
   mvId?: number // mv id
 }
 
-declare interface Artist {
-  id: number // 艺人id
-  name: string // 艺人名
-  alias?: string // 艺人别名
-  picUrl?: string // 艺人图片
-}
-
-declare interface ArtistInfo {
-  name: string
-  id: number
-  picUrl: string
-  briefDesc?: string
-  albumSize: number
-  musicSize: number
-  hotMusic?: Music[]
-  hotAlbum?: Album[]
-}
-
 declare interface Album {
   id: number
   name: string
   size: number
   picUrl: string
-  artist: Artist
+  artist: ArtistSimple
   info?: {
     commentCount: number
   }
@@ -45,19 +27,16 @@ declare interface Album {
   music?: Music[]
 }
 
-declare interface ArtistIntroduction {
-  briefDesc: string
-  introduction: Array<{
-    title: string
-    txt: Array<string>
-  }>
+declare interface AlbumWrapper {
+  album: Album[]
+  more: boolean
 }
 
 declare interface MV {
   name: string
   id: number
   picUrl: string
-  artist: Artist
+  artist: ArtistSimple
   playCount: number | string
   publishTime?: string
   duration?: string
@@ -69,12 +48,6 @@ declare interface albumTopInfoTypes {
   name: string
   musicSize: number
   albumSize: number
-}
-
-declare interface similarArtistTypes {
-  id: number
-  name: string
-  picUrl: string
 }
 
 declare interface musicUrl {
@@ -89,7 +62,8 @@ declare interface SongList {
   description?: string // 歌单描述
   tags?: string[] // 歌单标签
   trackCount: number // 歌曲数量
-  createTime?: number // 创建时间
+  publishTime?: number | string // 创建时间
+  updateTime?: number | string // 更新时间
   trackIds?: number[]
 }
 
