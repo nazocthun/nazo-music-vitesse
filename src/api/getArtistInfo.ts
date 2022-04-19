@@ -10,16 +10,19 @@ const REQUEST_URL = {
   mv: '/artist/mv',
 }
 
+// 获取歌手简单信息、热门单曲
 export const convertArtistInfo = async(res: AxiosResponse<any>): Promise<ArtistInfo> => {
   const artistInfo = res.data.artist
   const hotMusic = res.data.hotSongs
   return {
-    name: artistInfo.name,
-    id: artistInfo.id,
-    picUrl: getCompressedImgUrl(artistInfo.img1v1Url, 500),
-    briefDesc: artistInfo.briefDesc,
-    albumSize: artistInfo.albumSize,
-    musicSize: artistInfo.musicSize,
+    artist: {
+      name: artistInfo.name,
+      id: artistInfo.id,
+      picUrl: getCompressedImgUrl(artistInfo.img1v1Url, 500),
+      briefDesc: artistInfo.briefDesc,
+      albumSize: artistInfo.albumSize,
+      musicSize: artistInfo.musicSize,
+    },
     hotMusic: hotMusic.map((item: { id: any; name: any; al: { picUrl: string; id: any; name: any }; ar: { id: any; name: any; alia: any }[]; dt: number }) => {
       return {
         id: item.id,
@@ -47,36 +50,33 @@ export const getArtistInfo = (params = {}) => {
   return getRequest(REQUEST_URL.info, params).then(convertArtistInfo)
 }
 
-export const convertArtistHotAlbum = async(res: AxiosResponse<any>): Promise<Array<Album>> => {
+// 获取歌手热门专辑
+export const convertArtistHotAlbum = async(res: AxiosResponse<any>): Promise<AlbumWrapper> => {
   const hotAlbum = res.data.hotAlbums
-  return hotAlbum.map((item: { id: any; name: any; size: any; picUrl: string; artist: { id: any; name: any }; publishTime: Date }) => {
-    return {
-      id: item.id,
-      name: item.name,
-      size: item.size,
-      picUrl: getCompressedImgUrl(item.picUrl, 500),
-      artist: {
-        id: item.artist.id,
-        name: item.artist.name,
-      },
-      publishTime: formatDate(new Date(item.publishTime)),
-    }
-  })
+  return {
+    album: hotAlbum.map((item: { id: any; name: any; size: any; picUrl: string; artist: { id: any; name: any }; publishTime: Date }) => {
+      return {
+        id: item.id,
+        name: item.name,
+        size: item.size,
+        picUrl: getCompressedImgUrl(item.picUrl, 500),
+        artist: {
+          id: item.artist.id,
+          name: item.artist.name,
+        },
+        publishTime: formatDate(new Date(item.publishTime)),
+      }
+    }),
+    more: res.data.more,
+  }
 }
 
 export const getArtistHotAlbum = (params = {}) => {
   return getRequest(REQUEST_URL.album, params).then(convertArtistHotAlbum)
 }
 
-export const getArtist = (params = {}) => {
-  return Promise.all([getArtistInfo(params), getArtistHotAlbum(params)]).then((res) => {
-    const artistInfo = res[0]
-    artistInfo.hotAlbum = res[1]
-    return artistInfo
-  })
-}
-
-export const convertSimilarArtistInfo = async(res: AxiosResponse<any>): Promise<Array<Artist>> => {
+// 获取相似歌手信息
+export const convertSimilarArtistInfo = async(res: AxiosResponse<any>): Promise<Array<ArtistSimple>> => {
   const similarArtist = res.data.artists
   return similarArtist.map((item: { id: any; name: any; img1v1Url: string }) => {
     return {
@@ -91,6 +91,7 @@ export const getSimilarArtistInfo = (params = {}) => {
   return getRequest(REQUEST_URL.similar, params).then(convertSimilarArtistInfo)
 }
 
+// 获取歌手介绍
 export const convertArtistIntroduction = async(res: AxiosResponse<any>): Promise<ArtistIntroduction> => {
   return {
     briefDesc: res.data.briefDesc,
@@ -107,6 +108,7 @@ export const getArtistIntroduction = (params = {}) => {
   return getRequest(REQUEST_URL.introduction, params).then(convertArtistIntroduction)
 }
 
+// 获取歌手MV
 export const convertArtistMV = async(res: AxiosResponse<any>): Promise<Array<MV>> => {
   const mvs = res.data.mvs
 
