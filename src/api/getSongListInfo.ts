@@ -9,15 +9,18 @@ const REQUEST_URL = {
   detail: '/playlist/detail',
 }
 
+// 获取精选歌单
 export const convertSelectedSongList = async(res: AxiosResponse<any>): Promise<SongListWrapper> => {
   const songListInfo = res.data.playlists
   return {
-    songList: songListInfo.map((item: { name: any; id: any; coverImgUrl: string; trackCount: any }) => {
+    songList: songListInfo.map((item: { name: any; id: any; coverImgUrl: string; trackCount: any; createTime: VarDate; updateTime: VarDate }) => {
       return {
         name: item.name,
         id: item.id,
         picUrl: getCompressedImgUrl(item.coverImgUrl, 500),
         trackCount: item.trackCount,
+        publishTime: formatDate(new Date(item.createTime)),
+        updateTime: formatDate(new Date(item.updateTime)),
       }
     }),
     lastTime: res.data.lasttime,
@@ -30,6 +33,7 @@ export const getSelectedSongList = (params = {}) => {
   return getRequest(REQUEST_URL.selected, params).then(convertSelectedSongList)
 }
 
+// 用 tracksID 获取歌单歌曲
 export const convertSongListDetail = async(res: AxiosResponse<any>): Promise<SongList> => {
   const songListInfo = res.data.playlist
   return songListInfo.map((item: { id: any; name: any; coverImgUrl: string; userId: any; description: any; tags: any; trackCount: any; createTime: string | number | Date; trackIds: { id: any }[] }) => {
@@ -41,7 +45,7 @@ export const convertSongListDetail = async(res: AxiosResponse<any>): Promise<Son
       description: item.description,
       tags: item.tags,
       trackCount: item.trackCount,
-      createTime: formatDate(new Date(item.createTime)),
+      publishTime: formatDate(new Date(item.createTime)),
       trackIds: item.trackIds.map((item: { id: any }) => {
         return item.id
       }),
