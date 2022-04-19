@@ -6,10 +6,10 @@ declare module 'vue' {
   export interface GlobalComponents {
     BottomZone: typeof import('./src/components/Footer/BottomZone.vue')['default']
     CoverLazy: typeof import('./src/components/CoverLazy.vue')['default']
+    CoverView: typeof import('./src/components/CoverView.vue')['default']
     ElContainer: typeof import('element-plus/es')['ElContainer']
     ElImage: typeof import('element-plus/es')['ElImage']
     ElInput: typeof import('element-plus/es')['ElInput']
-    ElPagination: typeof import('element-plus/es')['ElPagination']
     ElScrollbar: typeof import('element-plus/es')['ElScrollbar']
     ElSlider: typeof import('element-plus/es')['ElSlider']
     ElTable: typeof import('element-plus/es')['ElTable']
