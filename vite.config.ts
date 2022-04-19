@@ -23,7 +23,12 @@ export default defineConfig({
     }),
 
     // https://github.com/hannoeru/vite-plugin-pages
-    Pages(),
+    Pages({
+      dirs: [
+        { dir: 'src/pages/**', baseRoute: '' },
+        // { dir: '@/pages/Lyrics', baseRoute: '' },
+      ],
+    }),
 
     // https://github.com/antfu/unplugin-auto-import
     AutoImport({

@@ -1,11 +1,12 @@
 import type { RouteRecordRaw } from 'vue-router'
 import { createRouter, createWebHistory } from 'vue-router'
-import DiscoverPage from '@/pages/Index/Discover/DiscoverPage.vue'
-import SongLists from '@/pages/Index/SongLists/SongLists.vue'
-import NewMusic from '@/pages/Index/NewMusic/NewMusic.vue'
-import MusicVideo from '@/pages/Index/MusicVideo/MusicVideo.vue'
-import AlbumPage from '@/pages/Album/AlbumPage.vue'
-import ArtistPage from '@/pages/Artist/ArtistPage.vue'
+import DiscoverPage from '@/pages/Index/index.vue'
+import CustomLists from '@/pages/Index/CustomLists.vue'
+import SelectedLists from '@/pages/Index/SelectedLists.vue'
+import NewMusic from '@/pages/Index/NewMusic.vue'
+import MusicVideo from '@/pages/Index/MusicVideo.vue'
+import AlbumPage from '@/pages/Album/album.vue'
+import ArtistPage from '@/pages/Artist/artist.vue'
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -14,9 +15,14 @@ const routes: Array<RouteRecordRaw> = [
     component: DiscoverPage,
   },
   {
-    path: '/songlists',
-    name: 'songlists',
-    component: SongLists,
+    path: '/customlists',
+    name: 'customlists',
+    component: CustomLists,
+  },
+  {
+    path: '/selectedlists',
+    name: 'selectedlists',
+    component: SelectedLists,
   },
   {
     path: '/newmusic',
