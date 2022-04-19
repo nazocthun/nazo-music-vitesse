@@ -114,7 +114,7 @@ const { addToQueue } = useMusicQueue()
 // 路由跳转
 const router = useRouter()
 function toArtist(id: any) {
-  router.push(`/artist?artistId=${id}`)
+  router.push(`/artist?id=${id}`)
 }
 function toAlbum(id: any) {
   router.push(`/album?id=${id}`)
