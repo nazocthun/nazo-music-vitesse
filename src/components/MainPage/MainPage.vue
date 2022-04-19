@@ -9,9 +9,15 @@
           </router-link>
         </li>
         <li>
+          <div i-ic-sharp-featured-play-list />
+          <router-link to="/customlists">
+            网友歌单
+          </router-link>
+        </li>
+        <li>
           <div i-ic-sharp-library-music />
-          <router-link to="/songlists">
-            发现歌单
+          <router-link to="/selectedlists">
+            精选歌单
           </router-link>
         </li>
         <li>

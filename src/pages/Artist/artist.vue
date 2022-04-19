@@ -26,30 +26,13 @@
         <MusicTable :data="musicData" :loading="loading" :pic="false" :album="true" />
       </el-tab-pane>
       <el-tab-pane label="专辑" name="album" :lazy="true">
-        <ul grid grid-cols-5 gap-5 items-center list-none pl-0 m-3>
-          <li v-for="(album, index1) in albumData" :key="index1" text-sm w-full>
-            <div class="group" w-full aspect-square relative cursor-pointer hover="scale-105 transition-all" @click="toAlbum(album.id)">
-              <CoverLazy :src="album.picUrl" />
-              <div
-                absolute justify-center items-center
-                w-12 h-12 top="50%" left="50%" translate-x="-50%" translate-y="-50%"
-                m-0 rounded-full opacity-0 group-hover="bg-white opacity-100 transition-all"
-                @click.stop="playAlbum(album.id)"
-              >
-                <div
-                  w-full h-full bg-orange-700
-                  i-ic-sharp-play-circle-outline
-                />
-              </div>
-            </div>
-            <div :title="album.name" my="1.5" overflow-hidden text-ellipsis whitespace-nowrap text-sm>
-              {{ album.name }}
-            </div>
-            <div text-xs>
-              {{ album.publishTime }}
-            </div>
-          </li>
-        </ul>
+        <CoverView
+          :data="albumData"
+          :more="more"
+          @load-more="loadMore"
+          @play="playAlbum"
+          @to="toAlbum"
+        />
       </el-tab-pane>
       <el-tab-pane label="MV" name="mv" :lazy="true">
         <div grid grid-cols-4 gap-5 m-3>
@@ -115,7 +98,13 @@
 <script setup lang="ts">
 import { useRoute, useRouter } from 'vue-router'
 import { onMounted, ref, watch } from 'vue'
-import { getArtist, getArtistIntroduction, getArtistMV, getSimilarArtistInfo } from '@/api/getArtistInfo'
+import {
+  getArtistHotAlbum,
+  getArtistInfo,
+  getArtistIntroduction,
+  getArtistMV,
+  getSimilarArtistInfo,
+} from '@/api/getArtistInfo'
 import useAlbum from '@/hooks/useAlbum'
 
 const route = useRoute()
@@ -125,52 +114,73 @@ const loading = ref(true)
 // API参数
 const params = {
   id: 0,
-  limit: 50,
+  limit: 20,
   offset: 0,
 }
 
 const artistId = ref()
 onMounted(() => {
-  artistId.value = route.query.artistId
+  artistId.value = route.query.id
   params.id = artistId.value
-  // getAlbumData(params)
-  // getMVData(params)
   initArtistInfo()
-  initArtistIntroduction()
-  initMVData()
 })
 
 // 面板激活切换
 const activeName = ref('hotMusic')
 function handleClick(tab: any) {
   loading.value = true
-  console.log(tab.props.label)
-  if (tab.props.label === '专辑' || tab.props.label === '热门歌曲')
-    initArtistInfo().then(() => { loading.value = false })
+  if (tab.props.label === '热门歌曲')
+    initArtistInfo()
+  else if (tab.props.label === '专辑')
+    initArtistAlbum()
   else if (tab.props.label === 'MV')
-    initMVData().then(() => { loading.value = false })
+    initMVData()
   else if (tab.props.label === '相似歌手')
-    initSimilarArtists().then(() => { loading.value = false })
+    initSimilarArtists()
   else if (tab.props.label === '歌手详情')
-    initArtistIntroduction().then(() => { loading.value = false })
+    initArtistIntroduction()
 }
 
 // 通过API获得数据
-const musicData = ref<Array<Music>>()
-const albumData = ref<Array<Album>>()
-const artistInfo = ref<Partial<ArtistInfo>>({})
+const musicData = ref<Music[] | undefined>([] as Music[])
+const albumData = ref<Album[]>([] as Album[])
+const artistInfo = ref<Artist>({} as Artist)
+const more = ref(true)
+
+// 获取艺人信息和热歌
 async function initArtistInfo() {
-  await getArtist(params).then((res) => {
-    console.log(res)
-    artistInfo.value = res
-    albumData.value = res.hotAlbum
+  await getArtistInfo(params).then((res) => {
+    artistInfo.value = res.artist
     musicData.value = res.hotMusic
   }).then(() => {
     loading.value = false
   })
 }
 
-// 获取艺人简介
+// 获取艺人专辑 一次20个
+async function initArtistAlbum() {
+  params.offset = 0
+  await getArtistHotAlbum(params).then((res) => {
+    albumData.value = res.album
+    more.value = res.more
+  }).then(() => {
+    loading.value = false
+  })
+}
+
+async function loadMore() {
+  params.offset += params.limit
+  await getArtistHotAlbum(params).then((res) => {
+    if (res.album.length === 0) return
+    for (const item of res.album)
+      albumData.value.push(item)
+    more.value = res.more
+  }).then(() => {
+    loading.value = false
+  })
+}
+
+// 获取艺人介绍
 const artistIntroduction = ref<Partial<ArtistIntroduction>>({})
 async function initArtistIntroduction() {
   await getArtistIntroduction(params).then((res) => {
@@ -182,7 +192,7 @@ async function initArtistIntroduction() {
 }
 
 // 获取相似艺人
-const similarArtists = ref<Array<Artist>>([])
+const similarArtists = ref<Array<ArtistSimple>>([])
 async function initSimilarArtists() {
   await getSimilarArtistInfo({ id: artistId.value }).then((res) => {
     similarArtists.value = res
@@ -194,6 +204,7 @@ async function initSimilarArtists() {
 // 获取MV数据
 const mvData = ref<Array<MV>>([])
 async function initMVData() {
+  params.offset = 0
   await getArtistMV(params).then((res) => {
     mvData.value = res
   }).then(() => {
@@ -209,7 +220,7 @@ function toAlbum(id: number) {
 }
 
 function toArtist(id: number) {
-  router.push(`/artist?artistId=${id}`)
+  router.push(`/artist?id=${id}`)
 }
 
 function toMV(id: number) {
@@ -220,7 +231,7 @@ function toMV(id: number) {
 // 路由监视，变更艺人时重制页面信息及选中标签
 watch(route, (newVal: any) => {
   if (newVal.query.artistId) {
-    artistId.value = newVal.query.artistId
+    artistId.value = newVal.query.id
     params.id = artistId.value
     initArtistInfo()
     // initMVData()
