@@ -34,6 +34,6 @@ export function playCountMinimize(playCount: number): string {
   return `${(playCount / 100000000).toFixed(1)}亿`
 }
 
-export function artistsTitleString(artists: Artist[]) {
+export function artistsTitleString(artists: ArtistSimple[]) {
   return artists.map(artist => artist.name).join(' & ')
 }

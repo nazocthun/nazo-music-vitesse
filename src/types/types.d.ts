@@ -64,7 +64,7 @@ declare interface SongList {
   trackCount: number // 歌曲数量
   publishTime?: number | string // 创建时间
   updateTime?: number | string // 更新时间
-  trackIds?: number[]
+  trackIds: number[]
 }
 
 declare interface SongListWrapper {
