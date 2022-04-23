@@ -35,7 +35,7 @@
       </ul>
     </div>
 
-    <div w-full m-0>
+    <div w-full m-0 h-full>
       <el-scrollbar style="height:100%">
         <router-view />
       </el-scrollbar>
