@@ -1,6 +1,12 @@
 <template>
-  <div v-loading="props.loading" w-full mx-auto>
-    <el-table :data="tableData" stripe style="width: 100%" @row-dblclick="rowDoubleClick">
+  <div w-full mx-auto>
+    <el-table
+      v-table-infinite-scroll="loadMore"
+      :data="tableData"
+      stripe style="width: 100%"
+      :max-height="props.maxHeight"
+      @row-dblclick="rowDoubleClick"
+    >
       <el-table-column type="index" width="50" />
       <el-table-column v-if="props.pic" width="100">
         <template #default="scope">
@@ -33,7 +39,7 @@
         <template #default="scope">
           <span :title="artistsTitleString(scope.row.artists)">
             <span v-for="(artist, i) in scope.row.artists" :key="i" overflow-hidden text-ellipsis whitespace-nowrap>
-              <span cursor-pointer text-sky-600 @click="toArtist(artist.id)">{{ artist.name }}</span>
+              <span cursor-pointer text-sky-600 hover="underline underline-offset-2" @click="toArtist(artist.id)">{{ artist.name }}</span>
               <span v-show="scope.row.artists.length != 1 && i!=scope.row.artists.length-1" text-gray-600 cursor-default>&nbsp;&amp;&nbsp;</span>
             </span>
           </span>
@@ -45,6 +51,7 @@
           <span
             :title="scope.row.album.name"
             flex-initial cursor-pointer text-sky-600 mr-auto pr-4 overflow-hidden text-ellipsis whitespace-nowrap
+            hover="underline underline-offset-2"
             @click="toAlbum(scope.row.album.id)"
           >
             {{ scope.row.album.name }}
@@ -65,6 +72,9 @@
           <span text-gray-600 cursor-default>{{ scope.row.time }}</span>
         </template>
       </el-table-column>
+      <template #append>
+        <showMore :more="props.more" :show-more="props.showMore" />
+      </template>
     </el-table>
   </div>
 </template>
@@ -101,8 +111,26 @@ const props = defineProps({
     },
     required: true,
   },
+  more: {
+    default() {
+      return true
+    },
+    required: false,
+  },
+  showMore: {
+    default() {
+      return true
+    },
+    required: false,
+  },
+  maxHeight: {
+    default() {
+      return '100%'
+    },
+    required: false,
+  },
 })
-const tableData = ref<Array<Music>>()
+const tableData = ref<Music[]>([] as Music[])
 
 watch(props, () => {
   tableData.value = props.data
@@ -119,6 +147,12 @@ function toArtist(id: any) {
 function toAlbum(id: any) {
   router.push(`/album?id=${id}`)
 }
+
+const em = defineEmits(['loadMore'])
+function loadMore() {
+  em('loadMore')
+}
+
 </script>
 
 <style>
