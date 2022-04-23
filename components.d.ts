@@ -26,6 +26,7 @@ declare module 'vue' {
     NavBar: typeof import('./src/components/NavBar/NavBar.vue')['default']
     PlayControl: typeof import('./src/components/Footer/PlayControl.vue')['default']
     SearchBox: typeof import('./src/components/NavBar/SearchBox.vue')['default']
+    ShowMore: typeof import('./src/components/showMore.vue')['default']
   }
 }
 
