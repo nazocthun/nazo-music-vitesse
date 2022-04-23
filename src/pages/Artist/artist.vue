@@ -28,41 +28,20 @@
       <el-tab-pane label="专辑" name="album" :lazy="true">
         <CoverView
           :data="albumData"
-          :more="more"
+          :more="albumMore"
+          :show-more="true"
           @load-more="loadMore"
           @play="playAlbum"
           @to="toAlbum"
         />
       </el-tab-pane>
       <el-tab-pane label="MV" name="mv" :lazy="true">
-        <div grid grid-cols-4 gap-5 m-3>
-          <div v-for="(mv, index) in mvData" :key="index" text-sm w-full>
-            <div class="group" w-full relative aspect-video hover="scale-105 transition-all" @click="toMV(mv.id)">
-              <CoverLazy :src="mv.picUrl" />
-              <div
-                absolute justify-center items-center cursor-pointer
-                w-12 h-12 top="50%" left="50%" translate-x="-50%" translate-y="-50%"
-                m-0 rounded-full opacity-0 group-hover="bg-white opacity-100 transition-all"
-              >
-                <div
-                  w-full h-full bg-orange-700
-                  i-ic-sharp-play-circle-outline
-                />
-              </div>
-              <div flex items-center absolute top-1 right-1 text-white text-xs cursor-default drop-shadow="[0_0_2px_rgba(0,0,0,1)]">
-                <div i-ic-sharp-play-arrow w-3 h-3 />
-                {{ mv.playCount }}
-              </div>
-            </div>
-            <div :title="mv.name" my="1.5" overflow-hidden text-ellipsis whitespace-nowrap text-sm>
-              {{ mv.name }}
-            </div>
-            <div text-xs>
-              {{ mv.publishTime }}
-            </div>
-          </div>
-          <span v-if="mvData.length == 0">暂无MV</span>
-        </div>
+        <CoverView
+          :data="mvData"
+          :show-more="false"
+          @play="toMV"
+          @to="toMV"
+        />
       </el-tab-pane>
       <el-tab-pane label="歌手详情" name="detail" :lazy="true">
         <span font-bold text-xl inline-block m-3>个人简介</span>
@@ -88,7 +67,7 @@
               {{ artist.name }}
             </div>
           </li>
-          <span v-if="similarArtists.length==0">暂无相似歌手</span>
+          <span v-if="similarArtists.length === 0 && !loading">暂无相似歌手</span>
         </ul>
       </el-tab-pane>
     </el-tabs>
@@ -145,7 +124,7 @@ function handleClick(tab: any) {
 const musicData = ref<Music[] | undefined>([] as Music[])
 const albumData = ref<Album[]>([] as Album[])
 const artistInfo = ref<Artist>({} as Artist)
-const more = ref(true)
+const albumMore = ref(true)
 
 // 获取艺人信息和热歌
 async function initArtistInfo() {
@@ -162,7 +141,7 @@ async function initArtistAlbum() {
   params.offset = 0
   await getArtistHotAlbum(params).then((res) => {
     albumData.value = res.album
-    more.value = res.more
+    albumMore.value = res.more
   }).then(() => {
     loading.value = false
   })
@@ -174,7 +153,7 @@ async function loadMore() {
     if (res.album.length === 0) return
     for (const item of res.album)
       albumData.value.push(item)
-    more.value = res.more
+    albumMore.value = res.more
   }).then(() => {
     loading.value = false
   })
@@ -230,15 +209,14 @@ function toMV(id: number) {
 
 // 路由监视，变更艺人时重制页面信息及选中标签
 watch(route, (newVal: any) => {
-  if (newVal.query.artistId) {
+  if (newVal.query.id) {
     artistId.value = newVal.query.id
     params.id = artistId.value
-    initArtistInfo()
-    // initMVData()
-    setTimeout(() => {
+    initArtistInfo().then(() => {
       activeName.value = 'hotMusic'
       loading.value = false
-    }, 0)
+    })
+    // initMVData()
   }
 })
 
