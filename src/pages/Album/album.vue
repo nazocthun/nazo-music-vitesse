@@ -22,7 +22,10 @@
             共{{ albumInfo.size }}首
           </div>
         </div>
-        <div inline-block mr-2 rounded-2xl bg-orange-700 py-1 px-4 text-white cursor-pointer @click="playAlbum(0,tableData)">
+        <div
+          inline-block mr-2 rounded-2xl bg-orange-700 py-1 px-4 text-white cursor-pointer
+          @click="playAlbum(0,tableData)"
+        >
           播放全部
         </div>
       </div>
@@ -30,7 +33,7 @@
     <el-tabs v-model="activeName" @tab-click="handleClick">
       <el-tab-pane label="歌曲列表" name="music">
         <div w-full>
-          <MusicTable :data="tableData" :loading="false" :pic="false" :album="false" />
+          <MusicTable :data="tableData" :loading="false" :pic="false" :album="false" :show-more="false" />
         </div>
       </el-tab-pane>
       <el-tab-pane label="专辑简介" name="descrption" :lazy="true">
