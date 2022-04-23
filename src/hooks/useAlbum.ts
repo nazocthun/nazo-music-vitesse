@@ -18,7 +18,7 @@ export default function useAlbum() {
       })
     }
     if (allMusic.length > 0) {
-      MUSIC_QUEUE_STORE.$reset()
+      MUSIC_QUEUE_STORE.resetQueue()
       for (const music of allMusic)
         addToQueueWith(music)
       changeNowIndexTo(0)
