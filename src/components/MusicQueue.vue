@@ -27,11 +27,30 @@
                     <div bg-orange-700 w-1 mx-px h-full class="playingIcon3" />
                   </div>
                   <span :class="{'':isPlaying && music.id===currentMusicInfo.id}" />
-                  <span w="35%" ml-6 px-1 overflow-hidden text-ellipsis whitespace-nowrap :title="music.name">{{ music.name }}</span>
-                  <span w="43.3%" cursor-pointer overflow-hidden text-ellipsis whitespace-nowrap text-sky-600 :title="artistsTitleString(music.artists)">
+                  <span
+                    w="35%" ml-6 px-1 overflow-hidden text-ellipsis whitespace-nowrap
+                    :title="music.name"
+                  >
+                    {{ music.name }}
+                  </span>
+                  <span
+                    w="43.3%" cursor-pointer overflow-hidden text-ellipsis whitespace-nowrap text-sky-600
+                    hover="underline underline-offset-2"
+                    :title="artistsTitleString(music.artists)"
+                  >
                     <span v-for="(artist , i) in music.artists" :key="i">
-                      <span @click.stop="toArtist(artist.id)">{{ artist.name }}</span>
-                      <span v-if="music.artists.length != 1 && i != music.artists.length - 1" text-gray-600 cursor-default>&nbsp;&amp;&nbsp;</span>
+                      <span
+                        hover="underline underline-offset-2"
+                        @click.stop="toArtist(artist.id)"
+                      >
+                        {{ artist.name }}
+                      </span>
+                      <span
+                        v-if="music.artists.length != 1 && i != music.artists.length - 1"
+                        text-gray-600 cursor-default
+                      >
+                        &nbsp;&amp;&nbsp;
+                      </span>
                     </span>
                   </span>
                   <span px-1 w="16.7%" text-right>{{ music.time }}</span>
