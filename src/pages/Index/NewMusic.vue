@@ -8,7 +8,15 @@
         <el-tab-pane label="日语" name="8" />
         <el-tab-pane label="韩语" name="16" />
       </el-tabs>
-      <MusicTable :data="tableData" :loading="loading" :pic="true" :album="true" />
+      <MusicTable
+        :data="tableData"
+        :loading="loading"
+        :pic="true"
+        :album="true"
+        :height="'100%'"
+        :show-more="false"
+        @load-more="loadMore"
+      />
     </div>
   </div>
 </template>
@@ -38,6 +46,10 @@ function init() {
   }).then(() => {
     loading.value = false
   })
+}
+
+function loadMore() {
+  
 }
 
 onMounted(() => {
