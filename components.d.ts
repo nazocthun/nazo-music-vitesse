@@ -12,13 +12,10 @@ declare module 'vue' {
     ElInput: typeof import('element-plus/es')['ElInput']
     ElScrollbar: typeof import('element-plus/es')['ElScrollbar']
     ElSlider: typeof import('element-plus/es')['ElSlider']
-    ElTable: typeof import('element-plus/es')['ElTable']
-    ElTableColumn: typeof import('element-plus/es')['ElTableColumn']
     ElTabPane: typeof import('element-plus/es')['ElTabPane']
     ElTabs: typeof import('element-plus/es')['ElTabs']
     ElTooltip: typeof import('element-plus/es')['ElTooltip']
     InfiniteScroll: typeof import('element-plus/es')['ElInfiniteScroll']
-    Loading: typeof import('element-plus/es')['ElLoadingDirective']
     MainPage: typeof import('./src/components/MainPage/MainPage.vue')['default']
     MusicInfo: typeof import('./src/components/Footer/MusicInfo.vue')['default']
     MusicQueue: typeof import('./src/components/MusicQueue.vue')['default']
@@ -26,7 +23,7 @@ declare module 'vue' {
     NavBar: typeof import('./src/components/NavBar/NavBar.vue')['default']
     PlayControl: typeof import('./src/components/Footer/PlayControl.vue')['default']
     SearchBox: typeof import('./src/components/NavBar/SearchBox.vue')['default']
-    ShowMore: typeof import('./src/components/showMore.vue')['default']
+    ShowMore: typeof import('./src/components/ShowMore.vue')['default']
   }
 }
 
