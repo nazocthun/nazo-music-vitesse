@@ -30,12 +30,14 @@
         </div>
       </div>
       <div flex items-center>
-        <span text-xs cursor-default pr-3 w-10 text-center>{{ playControlTimeFormat(currentTime) }}</span>
+        <span text-xs cursor-default pr-3 w-10 text-center>{{ playControlTimeFormat(audioTime) }}</span>
         <div flex-1 mx-2 my-0 justify-center>
           <el-slider
             v-model="audioTime"
             :max="duration"
             :show-tooltip="false"
+            :disabled="duration===0"
+            @input="updateDragingTime"
             @change="updateTime"
           />
         </div>
@@ -109,6 +111,7 @@ function log() {
 const { getMusicInfo } = usePlay()
 function play() {
   if (musicQueue.value.length !== 0) {
+    // if (!playing.value)
     getMusicInfo(musicQueue.value[nowIndex.value], 'queue')
     useToggle(playing)()
     return
@@ -178,11 +181,19 @@ watch(isMusicChanged, () => {
 })
 
 // 更新时间 实现拖动进度条时 音乐继续播放 松手才重新定位
+const isDraging = ref(false)
+
 watch(currentTime, () => {
+  if (isDraging.value) return
   audioTime.value = currentTime.value
 })
 
 function updateTime() {
   currentTime.value = audioTime.value
+  isDraging.value = false
+}
+
+function updateDragingTime() {
+  isDraging.value = true
 }
 </script>
