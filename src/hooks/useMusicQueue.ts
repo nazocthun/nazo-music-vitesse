@@ -8,7 +8,7 @@ export default function useMusicQueue() {
   const MUSIC_QUEUE_STORE = useMusicQueueStore()
   const PLAY_STORE = usePlayStore()
   const { musicQueue, nowIndex } = storeToRefs(MUSIC_QUEUE_STORE)
-  const { changQueueStyleTo, changeNowIndexTo, addToQueueWith } = MUSIC_QUEUE_STORE
+  const { changeQueueStyleTo, changeNowIndexTo, addToQueueWith } = MUSIC_QUEUE_STORE
   const { musicChanged } = PLAY_STORE
 
   function addToQueue(music: Music, from: 'doubleclick' | 'plus' | 'queue') {
@@ -32,13 +32,13 @@ export default function useMusicQueue() {
       return
     }
     setTimeout(() => {
-      changQueueStyleTo('add')
+      changeQueueStyleTo('add')
       addToQueueWith(music)
       if (from === 'doubleclick')
         changeNowIndexBy(music.id)
     }, 500)
     setTimeout(() => {
-      changQueueStyleTo('normal')
+      changeQueueStyleTo('normal')
     }, 1000)
   }
 
@@ -73,7 +73,7 @@ export default function useMusicQueue() {
     }
     if (musicQueue.value.length === 1) { // 若播放列表只有一首歌 则停止播放
       changeNowIndexTo(0)
-      MUSIC_INFO_STORE.$reset()
+      MUSIC_INFO_STORE.reset()
       ElMessage({
         type: 'warning',
         message: '队列播放完了',
