@@ -1,82 +1,82 @@
 <template>
-  <div v-loading="loading" max-w="1300px" my-0 mx-auto p-5>
-    <div flex text-sm mb-5>
-      <div w-50 h-50 mr="50px">
-        <CoverLazy :src="artistInfo.picUrl" />
-      </div>
-      <div class="artist-top-info-detail">
-        <div text-2xl font-bold>
-          {{ artistInfo.name }}
+  <el-scrollbar ref="scrollBar" @scroll="scroll">
+    <div v-loading="loading" max-w="1300px" my-0 mx-auto p-5>
+      <div flex text-sm mb-5>
+        <div w-50 h-50 mr="50px">
+          <CoverLazy :src="artistInfo.picUrl" />
         </div>
-        <div mt-5 flex>
-          <div>
-            单曲数：{{ artistInfo.musicSize }}
+        <div class="artist-top-info-detail">
+          <div text-2xl font-bold>
+            {{ artistInfo.name }}
           </div>
-          <div mx-5>
-            专辑数：{{ artistInfo.albumSize }}
-          </div>
-          <div>
-            MV数：{{ mvData.length }}
+          <div mt-5 flex>
+            <div>
+              单曲数：{{ artistInfo.musicSize }}
+            </div>
+            <div mx-5>
+              专辑数：{{ artistInfo.albumSize }}
+            </div>
+            <div>
+              MV数：{{ mvData.length }}
+            </div>
           </div>
         </div>
       </div>
-    </div>
-    <el-tabs v-model="activeName" @tab-click="handleClick">
-      <el-tab-pane label="热门歌曲" name="hotMusic">
-        <MusicTable :data="musicData" :loading="loading" :pic="false" :album="true" />
-      </el-tab-pane>
-      <el-tab-pane label="专辑" name="album" :lazy="true">
-        <CoverView
-          :data="albumData"
-          :more="albumMore"
-          :show-more="true"
-          @load-more="loadMore"
-          @play="playAlbum"
-          @to="toAlbum"
-        />
-      </el-tab-pane>
-      <el-tab-pane label="MV" name="mv" :lazy="true">
-        <CoverView
-          :data="mvData"
-          :show-more="false"
-          @play="toMV"
-          @to="toMV"
-        />
-      </el-tab-pane>
-      <el-tab-pane label="歌手详情" name="detail" :lazy="true">
-        <span font-bold text-xl inline-block m-3>个人简介</span>
-        <p indent-8 my-4 mx-0 text-base>
-          {{ artistIntroduction.briefDesc }}
-        </p>
-        <div v-for="(item, index) in artistIntroduction.introduction" :key="index">
-          <span font-bold text-xl inline-block m-3>
-            {{ item.title }}
-          </span>
-          <p v-for="(x,i) in item.txt" :key="i" indent-8 my-4 mx-0 text-base>
-            {{ x }}
+      <el-tabs v-model="activeName" @tab-click="handleClick">
+        <el-tab-pane label="热门歌曲" name="hotMusic">
+          <MusicTable :data="musicData" :loading="loading" :pic="false" :album="true" :show-more="false" />
+        </el-tab-pane>
+        <el-tab-pane label="专辑" name="album" :lazy="true">
+          <CoverView
+            :data="albumData"
+            :more="albumMore"
+            :show-more="true"
+            @load-more="loadMore"
+            @play="playAlbum"
+            @to="toAlbum"
+          />
+        </el-tab-pane>
+        <el-tab-pane label="MV" name="mv" :lazy="true">
+          <CoverView
+            :data="mvData"
+            :show-more="false"
+            @play="toMV"
+            @to="toMV"
+          />
+        </el-tab-pane>
+        <el-tab-pane label="歌手详情" name="detail" :lazy="true">
+          <span font-bold text-xl inline-block m-3>个人简介</span>
+          <p indent-8 my-4 mx-0 text-base>
+            {{ artistIntroduction.briefDesc }}
           </p>
-        </div>
-      </el-tab-pane>
-      <el-tab-pane label="相似歌手" name="similar" :lazy="true">
-        <ul grid grid-cols-5 gap-5 list-none pl-0 m-3>
-          <li v-for="(artist, index) in similarArtists" :key="index" w-full>
-            <div w-full aspect-square cursor-pointer relative hover="scale-105 transition-all" @click="toArtist(artist.id)">
-              <CoverLazy :src="artist.picUrl" />
-            </div>
-            <div text-sm text-center my="2.5" mx-0 text-stone-800>
-              {{ artist.name }}
-            </div>
-          </li>
-          <span v-if="similarArtists.length === 0 && !loading">暂无相似歌手</span>
-        </ul>
-      </el-tab-pane>
-    </el-tabs>
-  </div>
+          <div v-for="(item, index) in artistIntroduction.introduction" :key="index">
+            <span font-bold text-xl inline-block m-3>
+              {{ item.title }}
+            </span>
+            <p v-for="(x,i) in item.txt" :key="i" indent-8 my-4 mx-0 text-base>
+              {{ x }}
+            </p>
+          </div>
+        </el-tab-pane>
+        <el-tab-pane label="相似歌手" name="similar" :lazy="true">
+          <ul grid grid-cols-5 gap-5 list-none pl-0 m-3>
+            <li v-for="(artist, index) in similarArtists" :key="index" w-full>
+              <div w-full aspect-square cursor-pointer relative hover="scale-105 transition-all" @click="toArtist(artist.id)">
+                <CoverLazy :src="artist.picUrl" />
+              </div>
+              <div text-sm text-center my="2.5" mx-0 text-stone-800>
+                {{ artist.name }}
+              </div>
+            </li>
+            <span v-if="similarArtists.length === 0 && !loading">暂无相似歌手</span>
+          </ul>
+        </el-tab-pane>
+      </el-tabs>
+    </div>
+  </el-scrollbar>
 </template>
 
 <script setup lang="ts">
-import { useRoute, useRouter } from 'vue-router'
-import { onMounted, ref, watch } from 'vue'
 import {
   getArtistHotAlbum,
   getArtistInfo,
@@ -203,20 +203,30 @@ function toArtist(id: number) {
 }
 
 function toMV(id: number) {
-  // router.push(`/mv?id=${id}`)
+  router.push(`/mv?id=${id}`)
   console.log('to mv: ', id)
 }
 
+// keep-alive记住滚动条位置
+const currentScrollTop = ref(0)
+function scroll({ scrollTop }: { scrollTop: number }) {
+  currentScrollTop.value = scrollTop
+}
+const scrollBar = ref()
+onActivated(() => scrollBar.value.setScrollTop(currentScrollTop.value))
+
 // 路由监视，变更艺人时重制页面信息及选中标签
-watch(route, (newVal: any) => {
-  if (newVal.query.id) {
+watch(route, (newVal: any, oldVal) => {
+  if (route.name === 'artist' && newVal.query.id) {
     artistId.value = newVal.query.id
     params.id = artistId.value
     initArtistInfo().then(() => {
-      activeName.value = 'hotMusic'
+      if (activeName.value === 'similar') {
+        activeName.value = 'hotMusic'
+        scrollBar.value.setScrollTop(0)
+      }
       loading.value = false
     })
-    // initMVData()
   }
 })
 
@@ -224,12 +234,21 @@ watch(route, (newVal: any) => {
 
 <style scoped>
 
-.artist :deep(.el-tabs__item){
+/* .artist :deep(.el-tabs__item){
   @apply text-sm
-}
+} */
 
-.artist :deep(.el-loading-spinner) {
+/* .artist :deep(.el-loading-spinner) {
   @apply top-[15%]
-}
+} */
 
 </style>
+
+<route>
+{
+  name: "artist",
+  meta: {
+    keepAlive: true,
+  }
+}
+</route>
