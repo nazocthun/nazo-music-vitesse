@@ -42,7 +42,7 @@ export const convertAlbumInfo = async(res: AxiosResponse<any>): Promise<Album> =
     }),
     picUrl: getCompressedImgUrl(albumInfo.picUrl, 500),
     publishTime: formatDate(new Date(albumInfo.publishTime)),
-    description: albumInfo.description.split('\n'),
+    description: albumInfo.description ? albumInfo.description.split('\n') : ['暂无介绍'],
   }
 }
 
