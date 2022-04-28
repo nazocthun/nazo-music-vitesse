@@ -5,7 +5,7 @@ import routes from 'virtual:generated-pages'
 import App from './App.vue'
 import './styles/main.css'
 import 'uno.css'
-import '@/styles/custom.scss'
+// import '@/styles/custom.scss'
 
 const app = createApp(App)
 const pinia = createPinia()
@@ -27,12 +27,27 @@ app.directive('tableInfiniteScroll', {
     }
     tbody.addEventListener('scroll', el.tableInfiniteScrollFn)
     tbody = undefined
-    // console.log(tbody)
   },
   unmounted(el) {
     const tbody = el.querySelector('.el-table__body-wrapper')
     tbody.removeEventListener('scorll', el.tableInfiniteScrollFn)
     el.tableInfiniteScrollFn = undefined
+  },
+})
+
+app.directive('tableScroll', {
+  mounted(el, binding) {
+    let tbody = el.querySelector('.el-scrollbar__wrap')
+    el.tableScrollFn = function() {
+      binding.value(this.scrollTop)
+    }
+    tbody.addEventListener('scroll', el.tableScrollFn)
+    tbody = undefined
+  },
+  unmounted(el) {
+    const tbody = el.querySelector('.el-table__body-wrapper')
+    tbody.removeEventListener('scorll', el.tableScrollFn)
+    el.tableScrollFn = undefined
   },
 })
 
