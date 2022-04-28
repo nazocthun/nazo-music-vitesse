@@ -7,9 +7,9 @@ import Pages from 'vite-plugin-pages'
 import Components from 'unplugin-vue-components/vite'
 import AutoImport from 'unplugin-auto-import/vite'
 import Unocss from 'unocss/vite'
+import transformerDirective from '@unocss/transformer-directives'
 import { presetWind } from 'unocss'
 import { ElementPlusResolver } from 'unplugin-vue-components/resolvers'
-import ElementPlus from 'unplugin-element-plus/vite'
 
 export default defineConfig({
   resolve: {
@@ -17,10 +17,15 @@ export default defineConfig({
       '@/': `${path.resolve(__dirname, 'src')}/`,
     },
   },
+  css: {
+    preprocessorOptions: {
+      scss: {
+        additionalData: '@use "@/styles/custom.scss" as *;',
+      },
+    },
+  },
   plugins: [
-    Vue({
-      reactivityTransform: true,
-    }),
+    Vue(),
 
     // https://github.com/hannoeru/vite-plugin-pages
     Pages({
@@ -32,7 +37,11 @@ export default defineConfig({
 
     // https://github.com/antfu/unplugin-auto-import
     AutoImport({
-      resolvers: [ElementPlusResolver()],
+      resolvers: [ElementPlusResolver({
+        importStyle: 'sass',
+        directives: true,
+        version: '2.1.10',
+      })],
       imports: [
         'vue',
         'vue/macros',
@@ -41,10 +50,13 @@ export default defineConfig({
       ],
       dts: true,
     }),
-
     // https://github.com/antfu/vite-plugin-components
     Components({
-      resolvers: [ElementPlusResolver()],
+      resolvers: [ElementPlusResolver({
+        importStyle: 'sass',
+        directives: true,
+        version: '2.1.10',
+      })],
       dts: true,
     }),
 
@@ -55,9 +67,14 @@ export default defineConfig({
         presetWind(),
       ],
       rules: [],
+      transformers: [
+        transformerDirective(),
+      ],
     }),
 
-    ElementPlus(),
+    // ElementPlus({
+    //   useSource: false,
+    // }),
   ],
 
   // https://github.com/vitest-dev/vitest
