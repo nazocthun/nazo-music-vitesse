@@ -7,7 +7,7 @@ export const useMusicQueueStore = defineStore('musicQueueStore', () => {
   const musicQueueStyle = ref('normal')
   const deleteToNext = ref(false)
   const queuePlayStyle = ref('sequence')
-  function changQueueStyleTo(style: string) {
+  function changeQueueStyleTo(style: string) {
     musicQueueStyle.value = style
   }
   function changeNowIndexTo(index: number) {
@@ -44,7 +44,7 @@ export const useMusicQueueStore = defineStore('musicQueueStore', () => {
     musicQueueStyle,
     deleteToNext,
     queuePlayStyle,
-    changQueueStyleTo,
+    changeQueueStyleTo,
     changeNowIndexTo,
     addToQueueWith,
     deleteMusicBy,
