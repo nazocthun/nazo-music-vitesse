@@ -36,9 +36,12 @@
     </div>
 
     <div w-full m-0 h-full>
-      <el-scrollbar style="height:100%">
-        <router-view />
-      </el-scrollbar>
+      <router-view v-slot="{ Component, route }">
+        <keep-alive>
+          <component :is="Component" v-if="$route.meta.keepAlive" :key="route.name" />
+        </keep-alive>
+        <component :is="Component" v-if="!$route.meta.keepAlive" :key="route.name" />
+      </router-view>
     </div>
   </div>
 </template>
@@ -48,7 +51,7 @@
 </script>
 
 <style lang="scss">
-@import '@/styles/custom.scss';
+// @import '@/styles/custom.scss';
   .sidebar {
     margin: 0;
     padding: 0;
