@@ -90,9 +90,6 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch } from 'vue'
-import { useRouter } from 'vue-router'
-import { ElMessage, ElMessageBox } from 'element-plus'
 import { storeToRefs } from 'pinia'
 import usePlay from '@/hooks/usePlay'
 import { artistsTitleString } from '@/utils/common'
@@ -106,7 +103,7 @@ const PLAY_STORE = usePlayStore()
 
 const { currentMusicInfo } = storeToRefs(MUSIC_INFO_STORE)
 const { nowIndex, musicQueue, deleteToNext } = storeToRefs(MUSIC_QUEUE_STORE)
-const { changQueueStyleTo, changeNowIndexTo, deleteMusicBy, toggleDeleteToNext } = MUSIC_QUEUE_STORE
+const { changeQueueStyleTo, changeNowIndexTo, deleteMusicBy, toggleDeleteToNext } = MUSIC_QUEUE_STORE
 const { isPlaying } = storeToRefs(PLAY_STORE)
 
 const activeName = ref('playList')
@@ -172,7 +169,7 @@ function deleteQueue(id: number) { // TODO:
     ids.push(item.id)
   const indexOfId = ids.indexOf(id)
   setTimeout(() => {
-    changQueueStyleTo('delete')
+    changeQueueStyleTo('delete')
     deleteMusicBy(id)
     if (indexOfId < nowIndex.value) { // 删除的是当前播放之前的歌曲
       changeNowIndexTo(nowIndex.value - 1)
@@ -188,7 +185,7 @@ function deleteQueue(id: number) { // TODO:
     }
   }, 300)
   setTimeout(() => {
-    changQueueStyleTo('normal')
+    changeQueueStyleTo('normal')
   }, 300)
 }
 
