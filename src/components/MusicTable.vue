@@ -1,7 +1,9 @@
 <template>
   <div w-full mx-auto>
     <el-table
+      ref="table"
       v-table-infinite-scroll="loadMore"
+      v-table-scroll="scroll"
       :data="tableData"
       stripe style="width: 100%"
       :max-height="props.maxHeight"
@@ -81,7 +83,7 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import { useRouter } from 'vue-router'
+import { onBeforeRouteLeave, onBeforeRouteUpdate, useRouter } from 'vue-router'
 import { artistsTitleString } from '@/utils/common'
 import usePlay from '@/hooks/usePlay'
 import useMusicQueue from '@/hooks/useMusicQueue'
@@ -152,6 +154,50 @@ const em = defineEmits(['loadMore'])
 function loadMore() {
   em('loadMore')
 }
+
+// keep-alive记住滚动条位置
+const table = ref()
+
+const currentScrollTop = ref(0)
+function scroll(height: number) {
+  currentScrollTop.value = height
+}
+const route = useRoute()
+// watchEffect(() => console.log(currentScrollTop.value))
+// watchEffect(() => console.log(route))
+
+onActivated(() => {
+  console.log(currentScrollTop.value)
+  table.value.setScrollTop(currentScrollTop.value)
+})
+
+// watch([() => route.query.id, () => route.path], ([newId, newPath], [oldId, oldPath]) => {
+//   console.log(newId, oldId, newPath, oldPath)
+//   if (newPath === oldPath && newId !== oldId) {
+//     currentScrollTop.value = 0
+//     console.log(currentScrollTop.value)
+//   }
+// })
+
+onBeforeRouteUpdate(() => {
+  console.log(currentScrollTop.value)
+  table.value.setScrollTop(currentScrollTop.value)
+})
+
+onBeforeRouteLeave((to, from) => { // TODO: router change
+  // console.log(to, from)
+  console.log(to.path, from.path, to.query.id, from.query.id)
+  if (to.path === from.path && to.query.id !== from.query.id) {
+    currentScrollTop.value = 0
+    console.log(currentScrollTop.value)
+  }
+})
+
+// onBeforeUpdate(() => {
+//   console.log('beforeupdate')
+//   console.log(currentScrollTop.value)
+//   table.value.setScrollTop(currentScrollTop.value)
+// })
 
 </script>
 
