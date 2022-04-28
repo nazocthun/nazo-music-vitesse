@@ -85,15 +85,6 @@ function handleClick(tab: any) {
 // 播放音乐, 加入队列Hook
 const { playAlbum } = useAlbum()
 
-// function playAll() { // TODO: confirm window
-//   const allMusic = tableData.value ?? []
-//   MUSIC_QUEUE_STORE.$reset()
-//   for (const music of allMusic)
-//     addToQueueWith(music)
-//   changeNowIndexTo(0)
-//   getMusicInfo(allMusic[0], 'queue')
-// }
-
 // 路由跳转
 const route = useRoute()
 
