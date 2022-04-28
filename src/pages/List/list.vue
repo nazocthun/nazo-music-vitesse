@@ -22,7 +22,7 @@
             共{{ songListInfo.trackCount }}首
           </div>
         </div>
-        <div inline-block mr-2 rounded-2xl bg-orange-700 py-1 px-4 text-white cursor-pointer @click="playSongList(0,tableData)">
+        <div inline-block mr-2 rounded-2xl bg-orange-700 py-1 px-4 text-white cursor-pointer @click="playSongList(trackIds)">
           播放全部
         </div>
       </div>
@@ -43,6 +43,15 @@
         </div>
       </el-tab-pane>
       <el-tab-pane label="评论" name="comment" :lazy="true" />
+      <el-tab-pane label="相似歌单" name="similarLists" :lazy="true">
+        <CoverView
+          :data="simlilarListsData"
+          :more="false"
+          :show-more="false"
+          @play="playSongListById"
+          @to="toSongList"
+        />
+      </el-tab-pane>
     </el-tabs>
   </div>
 </template>
@@ -50,8 +59,10 @@
 <script setup lang="ts">
 import { onMounted, ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
-import { getSongListDetail } from '@/api/getSongListInfo'
+import useSongList from '@/hooks/useSongList'
+import { getSimilarSongList, getSongListDetail } from '@/api/getSongListInfo'
 import { getSongDetail } from '@/api/getSongDetail'
+
 
 const loading = ref(true)
 const songListId = ref()
@@ -94,14 +105,15 @@ function getTrackIdsByOffset(currentOffset: number) {
 
 const activeName = ref('music')
 function handleClick(tab: any) {
-}
-
-function playSongList() {
-
+  loading.value = true
+  if (tab.props.label === '歌曲列表')
+    init()
+  else if (tab.props.label === '相似歌单')
+    initSimilarLists()
+  loading.value = false
 }
 
 function loadMore() {
-  console.log('loadMore')
   if (!more.value || trackIds.value.length === 0) return
   getSongDetail({
     ids: getTrackIdsByOffset(offset.value),
@@ -113,32 +125,38 @@ function loadMore() {
   })
 }
 
-// 播放音乐, 加入队列Hook
-// const { playAlbum } = useAlbum()
+// 获取相似歌单
+const simlilarListsData = ref<SongList[]>([] as SongList[])
+function initSimilarLists() {
+  getSimilarSongList({
+    id: songListId.value,
+  }).then((res) => {
+    simlilarListsData.value = res
+  }).then(() => {
+    loading.value = false
+  })
+}
 
-// function playAll() { // TODO: confirm window
-//   const allMusic = tableData.value ?? []
-//   MUSIC_QUEUE_STORE.$reset()
-//   for (const music of allMusic)
-//     addToQueueWith(music)
-//   changeNowIndexTo(0)
-//   getMusicInfo(allMusic[0], 'queue')
-// }
+// 播放音乐, 加入队列Hook
+const { playSongList, playSongListById } = useSongList()
 
 // 路由跳转
 const route = useRoute()
-
+const router = useRouter()
+function toSongList(id: string) {
+  router.push(`/list?id=${id}`)
+  console.log(`toSongList${id}`)
+}
 // 监视路由变化
-watch(() => route, (newValue) => {
-  songListId.value = newValue.params.id
-  params.id = songListId.value
-  init()
-  // this.getComments(true)
-
-  setTimeout(() => {
-    activeName.value = 'first'
-    loading.value = false
-  }, 0)
+watch(route, (newVal) => {
+  if (route.name === 'list' && newVal.query.id) {
+    songListId.value = newVal.query.id
+    params.id = songListId.value
+    init().then(() => {
+      activeName.value = 'music'
+      loading.value = false
+    })
+  }
 })
 
 onMounted(() => {
@@ -151,3 +169,11 @@ onMounted(() => {
 <style lang="scss" scoped>
 
 </style>
+
+<route>
+{
+  meta: {
+    keepAlive: true,
+  }
+}
+</route>
