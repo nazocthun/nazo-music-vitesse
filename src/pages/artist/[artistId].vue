@@ -86,7 +86,7 @@ import {
 } from '@/api/getArtistInfo'
 import useAlbum from '@/hooks/useAlbum'
 
-const route = useRoute()
+const props = defineProps<{ artistId: string }>()
 const router = useRouter()
 const loading = ref(true)
 
@@ -99,7 +99,7 @@ const params = {
 
 const artistId = ref()
 onMounted(() => {
-  artistId.value = route.query.id
+  artistId.value = props.artistId
   params.id = artistId.value
   initArtistInfo()
 })
@@ -195,16 +195,15 @@ const { playAlbum } = useAlbum()
 
 // 路由跳转
 function toAlbum(id: number) {
-  router.push(`/album?id=${id}`)
+  router.push(`/album/${id}`)
 }
 
 function toArtist(id: number) {
-  router.push(`/artist?id=${id}`)
+  router.push(`/artist/${id}`)
 }
 
 function toMV(id: number) {
-  router.push(`/mv?id=${id}`)
-  console.log('to mv: ', id)
+  router.push(`/mv/${id}`)
 }
 
 // keep-alive记住滚动条位置
@@ -216,18 +215,16 @@ const scrollBar = ref()
 onActivated(() => scrollBar.value.setScrollTop(currentScrollTop.value))
 
 // 路由监视，变更艺人时重制页面信息及选中标签
-watch(route, (newVal: any, oldVal) => {
-  if (route.name === 'artist' && newVal.query.id) {
-    artistId.value = newVal.query.id
-    params.id = artistId.value
-    initArtistInfo().then(() => {
-      if (activeName.value === 'similar') {
-        activeName.value = 'hotMusic'
-        scrollBar.value.setScrollTop(0)
-      }
-      loading.value = false
-    })
-  }
+watch(() => props.artistId, () => {
+  artistId.value = props.artistId
+  params.id = artistId.value
+  initArtistInfo().then(() => {
+    if (activeName.value === 'similar') {
+      activeName.value = 'hotMusic'
+      scrollBar.value.setScrollTop(0)
+    }
+    loading.value = false
+  })
 })
 
 </script>

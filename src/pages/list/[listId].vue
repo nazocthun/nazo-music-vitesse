@@ -10,6 +10,7 @@
             歌单
           </div>
           {{ songListInfo.name }}
+          <!-- <button btn @click="top">set</button> -->
         </div>
         <div items-center text-sm>
           <div mx="10px" my-5>
@@ -31,6 +32,7 @@
       <el-tab-pane label="歌曲列表" name="music">
         <div w-full>
           <MusicTable
+            ref="musicTable"
             :data="tableData"
             :loading="false"
             :pic="true"
@@ -58,12 +60,12 @@
 
 <script setup lang="ts">
 import { onMounted, ref, watch } from 'vue'
-import { useRoute } from 'vue-router'
+import { onBeforeRouteUpdate, useRoute } from 'vue-router'
 import useSongList from '@/hooks/useSongList'
 import { getSimilarSongList, getSongListDetail } from '@/api/getSongListInfo'
 import { getSongDetail } from '@/api/getSongDetail'
 
-
+const props = defineProps<{ listId: string }>()
 const loading = ref(true)
 const songListId = ref()
 
@@ -144,23 +146,43 @@ const { playSongList, playSongListById } = useSongList()
 const route = useRoute()
 const router = useRouter()
 function toSongList(id: string) {
-  router.push(`/list?id=${id}`)
-  console.log(`toSongList${id}`)
+  router.push(`/list/${id}`)
 }
 // 监视路由变化
-watch(route, (newVal) => {
-  if (route.name === 'list' && newVal.query.id) {
-    songListId.value = newVal.query.id
-    params.id = songListId.value
-    init().then(() => {
-      activeName.value = 'music'
-      loading.value = false
-    })
-  }
+// watch(route, (newVal) => {
+
+//   if (route.name === 'list' && newVal.query.id) {
+//     songListId.value = newVal.query.id
+//     params.id = songListId.value
+//     init().then(() => {
+//       activeName.value = 'music'
+//       loading.value = false
+//     })
+//   }
+// })
+const musicTable = ref()
+watch(() => props.listId, () => {
+  songListId.value = props.listId
+  params.id = songListId.value
+  init().then(() => {
+    activeName.value = 'music'
+  }).then(() => {
+    musicTable.value.table.setScrollTop(0)
+    loading.value = false
+  })
+})
+
+// function top() {
+//   musicTable.value.table.setScrollTop(0)
+// }
+
+onBeforeRouteUpdate((to, from) => {
+  if (to.name === from.name && to.path !== from.path)
+    musicTable.value.table.setScrollTop(0)
 })
 
 onMounted(() => {
-  songListId.value = route.query.id
+  songListId.value = props.listId
   params.id = songListId.value
   init()
 })

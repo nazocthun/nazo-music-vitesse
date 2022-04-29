@@ -48,11 +48,10 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref, watch } from 'vue'
-import { useRoute } from 'vue-router'
 import { getAlbumInfo } from '@/api/getAlbumInfo'
 import useAlbum from '@/hooks/useAlbum'
 
+const props = defineProps<{ albumId: string }>()
 const loading = ref(true)
 const albumId = ref()
 
@@ -85,24 +84,18 @@ function handleClick(tab: any) {
 // 播放音乐, 加入队列Hook
 const { playAlbum } = useAlbum()
 
-// 路由跳转
-const route = useRoute()
-
 // 监视路由变化
-watch(() => route, (newValue) => {
-  albumId.value = newValue.params.id
+watch(() => props.albumId, () => {
+  albumId.value = props.albumId
   params.id = albumId.value
-  getAlbumInfo(params)
-  // this.getComments(true)
-
-  setTimeout(() => {
+  getAlbumInfo(params).then(() => {
     activeName.value = 'first'
     loading.value = false
-  }, 0)
+  })
 })
 
 onMounted(() => {
-  albumId.value = route.query.id
+  albumId.value = props.albumId
   params.id = albumId.value
   init()
 })

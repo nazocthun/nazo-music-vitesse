@@ -30,7 +30,7 @@ export default defineConfig({
     // https://github.com/hannoeru/vite-plugin-pages
     Pages({
       dirs: [
-        { dir: 'src/pages/**', baseRoute: '' },
+        { dir: 'src/pages', baseRoute: '' },
         // { dir: '@/pages/Lyrics', baseRoute: '' },
       ],
     }),

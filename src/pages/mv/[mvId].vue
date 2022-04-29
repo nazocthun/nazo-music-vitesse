@@ -5,11 +5,12 @@
 </template>
 
 <script setup lang="ts">
-const route = useRoute()
+
+const props = defineProps<{ mvId: string }>()
 const mvId = ref()
 
 onMounted(() => {
-  mvId.value = route.query.id
+  mvId.value = props.mvId
 })
 </script>
 
