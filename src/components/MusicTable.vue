@@ -82,8 +82,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
-import { onBeforeRouteLeave, onBeforeRouteUpdate, useRouter } from 'vue-router'
+import { onBeforeRouteUpdate } from 'vue-router'
 import { artistsTitleString } from '@/utils/common'
 import usePlay from '@/hooks/usePlay'
 import useMusicQueue from '@/hooks/useMusicQueue'
@@ -144,10 +143,10 @@ const { addToQueue } = useMusicQueue()
 // 路由跳转
 const router = useRouter()
 function toArtist(id: any) {
-  router.push(`/artist?id=${id}`)
+  router.push(`/artist/${id}`)
 }
 function toAlbum(id: any) {
-  router.push(`/album?id=${id}`)
+  router.push(`/album/${id}`)
 }
 
 const em = defineEmits(['loadMore'])
@@ -157,42 +156,32 @@ function loadMore() {
 
 // keep-alive记住滚动条位置
 const table = ref()
+defineExpose({ table })
 
 const currentScrollTop = ref(0)
 function scroll(height: number) {
   currentScrollTop.value = height
 }
-const route = useRoute()
+
 // watchEffect(() => console.log(currentScrollTop.value))
 // watchEffect(() => console.log(route))
 
 onActivated(() => {
-  console.log(currentScrollTop.value)
+  // console.log(currentScrollTop.value)
   table.value.setScrollTop(currentScrollTop.value)
 })
 
-// watch([() => route.query.id, () => route.path], ([newId, newPath], [oldId, oldPath]) => {
-//   console.log(newId, oldId, newPath, oldPath)
-//   if (newPath === oldPath && newId !== oldId) {
-//     currentScrollTop.value = 0
-//     console.log(currentScrollTop.value)
-//   }
-// })
-
-onBeforeRouteUpdate(() => {
-  console.log(currentScrollTop.value)
-  table.value.setScrollTop(currentScrollTop.value)
-})
-
-onBeforeRouteLeave((to, from) => { // TODO: router change
-  // console.log(to, from)
-  console.log(to.path, from.path, to.query.id, from.query.id)
-  if (to.path === from.path && to.query.id !== from.query.id) {
+onBeforeRouteUpdate((to, from) => {
+  if (to.name === from.name && to.path !== from.path)
     currentScrollTop.value = 0
-    console.log(currentScrollTop.value)
-  }
+  // console.log(currentScrollTop.value)
+  // table.value.setScrollTop(currentScrollTop.value)
 })
 
+// onUpdated(() => {
+//   console.log(currentScrollTop.value)
+//   table.value.setScrollTop(currentScrollTop.value)
+// })
 // onBeforeUpdate(() => {
 //   console.log('beforeupdate')
 //   console.log(currentScrollTop.value)
