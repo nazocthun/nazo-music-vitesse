@@ -10,7 +10,6 @@
             歌单
           </div>
           {{ songListInfo.name }}
-          <!-- <button btn @click="top">set</button> -->
         </div>
         <div items-center text-sm>
           <div mx="10px" my-5>
@@ -60,7 +59,7 @@
 
 <script setup lang="ts">
 import { onMounted, ref, watch } from 'vue'
-import { onBeforeRouteUpdate, useRoute } from 'vue-router'
+import { onBeforeRouteUpdate } from 'vue-router'
 import useSongList from '@/hooks/useSongList'
 import { getSimilarSongList, getSongListDetail } from '@/api/getSongListInfo'
 import { getSongDetail } from '@/api/getSongDetail'
@@ -143,23 +142,11 @@ function initSimilarLists() {
 const { playSongList, playSongListById } = useSongList()
 
 // 路由跳转
-const route = useRoute()
 const router = useRouter()
 function toSongList(id: string) {
   router.push(`/list/${id}`)
 }
 // 监视路由变化
-// watch(route, (newVal) => {
-
-//   if (route.name === 'list' && newVal.query.id) {
-//     songListId.value = newVal.query.id
-//     params.id = songListId.value
-//     init().then(() => {
-//       activeName.value = 'music'
-//       loading.value = false
-//     })
-//   }
-// })
 const musicTable = ref()
 watch(() => props.listId, () => {
   songListId.value = props.listId
@@ -171,10 +158,6 @@ watch(() => props.listId, () => {
     loading.value = false
   })
 })
-
-// function top() {
-//   musicTable.value.table.setScrollTop(0)
-// }
 
 onBeforeRouteUpdate((to, from) => {
   if (to.name === from.name && to.path !== from.path)

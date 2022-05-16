@@ -163,30 +163,14 @@ function scroll(height: number) {
   currentScrollTop.value = height
 }
 
-// watchEffect(() => console.log(currentScrollTop.value))
-// watchEffect(() => console.log(route))
-
 onActivated(() => {
-  // console.log(currentScrollTop.value)
   table.value.setScrollTop(currentScrollTop.value)
 })
 
 onBeforeRouteUpdate((to, from) => {
   if (to.name === from.name && to.path !== from.path)
     currentScrollTop.value = 0
-  // console.log(currentScrollTop.value)
-  // table.value.setScrollTop(currentScrollTop.value)
 })
-
-// onUpdated(() => {
-//   console.log(currentScrollTop.value)
-//   table.value.setScrollTop(currentScrollTop.value)
-// })
-// onBeforeUpdate(() => {
-//   console.log('beforeupdate')
-//   console.log(currentScrollTop.value)
-//   table.value.setScrollTop(currentScrollTop.value)
-// })
 
 </script>
 

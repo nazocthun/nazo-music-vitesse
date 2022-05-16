@@ -16,7 +16,6 @@
           :album="true"
           :height="'100%'"
           :show-more="false"
-          @load-more="loadMore"
         />
       </div>
     </div>
@@ -24,7 +23,6 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
 import { getNewMusic } from '@/api/getNewMusic'
 
 const activeName = ref('0')
@@ -57,10 +55,6 @@ function scroll({ scrollTop }: { scrollTop: number }) {
 }
 const scrollBar = ref()
 onActivated(() => scrollBar.value.setScrollTop(currentScrollTop.value))
-
-function loadMore() {
-  
-}
 
 onMounted(() => {
   init()
