@@ -7,11 +7,10 @@
         <div
           ref="queueButton"
           :class="{
-            'queue-icon queue-delete-before animate-[deleteAnimation_0.3s_reverse]':musicQueueStyle=='delete',
-            'queue-icon queue-add-before animate-[addAnimation_0.3s_reverse]':musicQueueStyle=='add',
-            'queue-icon':musicQueueStyle=='normal'
+            'queue-delete-before':musicQueueStyle=='delete',
+            'queue-add-before':musicQueueStyle=='add',
           }"
-          flex justify-start items-center cursor-pointer float-left
+          mr-24 cursor-pointer flex relative justify-start items-center float-left
           @click="toggleQueue()"
         >
           <span w-8 h-8 i-ic-sharp-queue-music />
@@ -46,33 +45,33 @@ onClickOutside(queue, () => {
 
 </script>
 
-<style scoped>
-  .footer audio {
-    width: 100%;
-    outline: none;
-  }
+<style>
+.footer audio {
+  width: 100%;
+  outline: none;
+}
 
-  .music-box .img-wrap::before{
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: rgba(0, 0, 0,.3);
-    color: #fff;
-    border-radius: 5px;
-    display: none;
-  }
+.music-box .img-wrap::before{
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(0, 0, 0,.3);
+  color: #fff;
+  border-radius: 5px;
+  display: none;
+}
 
-  .music-box .img-wrap:hover::before{
-    display: flex;
-  }
-.queue-icon {
-  @apply mr-24 cursor-pointer
+.music-box .img-wrap:hover::before{
+  display: flex;
 }
 
 @keyframes addAnimation {
+  from {
+    transform: scale(1);
+  }
   to {
     color: rgb(194, 65, 12);
     transform: scale(1.2);
@@ -80,21 +79,24 @@ onClickOutside(queue, () => {
 }
 
 @keyframes deleteAnimation {
+  from {
+    transform: scale(1);
+  }
   to {
     color: rgb(34, 211, 238);
     transform: scale(1.2);
   }
 }
 
-.queue-icon-before {
-  @apply before:absolute before:-top-2 before:-left-5 before:font-bold before:scale-75
-}
-
 .queue-add-before {
-  @apply before:content-['+1'] queue-icon-before
+  @apply before:content-['+1'];
+  @apply before:absolute before:-top-2 before:-left-5 before:font-bold before:scale-75;
+  @apply before:animate-[addAnimation_0.5s_reverse];
 }
 .queue-delete-before {
-  @apply before:content-['-1'] queue-icon-before
+  @apply before:content-['-1'];
+  @apply before:absolute before:-top-2 before:-left-5 before:font-bold before:scale-75;
+  @apply before:animate-[deleteAnimation_0.5s_reverse];
 }
 
 .fade-enter-from, .fade-leave-to {

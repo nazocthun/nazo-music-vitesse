@@ -183,10 +183,10 @@ function deleteQueue(id: number) { // TODO:
         break
       }
     }
-  }, 300)
+  }, 500)
   setTimeout(() => {
     changeQueueStyleTo('normal')
-  }, 300)
+  }, 1000)
 }
 
 // 监视删除状态
@@ -196,9 +196,15 @@ watch(deleteToNext, () => {
     getMusicInfo(musicQueue.value[nowIndex.value], 'queue')
   // 队列中没有音乐重置
   if (musicQueue.value.length === 0) {
-    MUSIC_INFO_STORE.reset()
-    PLAY_STORE.reset()
-    MUSIC_QUEUE_STORE.resetQueue()
+    setTimeout(() => {
+      changeQueueStyleTo('delete')
+      MUSIC_INFO_STORE.reset()
+      PLAY_STORE.reset()
+      MUSIC_QUEUE_STORE.resetQueue()
+    }, 500)
+    setTimeout(() => {
+      changeQueueStyleTo('normal')
+    }, 1000)
   }
   // 当前播放是队列最后一首，跳回第一首
   if (nowIndex.value === musicQueue.value.length)
