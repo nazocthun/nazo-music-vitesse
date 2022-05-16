@@ -15,11 +15,11 @@ const MUSIC_QUEUE_STORE = useMusicQueueStore()
 const { musicQueue } = storeToRefs(MUSIC_QUEUE_STORE)
 
 MUSIC_QUEUE_STORE.$subscribe((state) => {
-  localStorage.setItem('musicQueue', JSON.stringify(musicQueue.value))
+  localStorage.setItem('nazoMusicQueue', JSON.stringify(musicQueue.value))
 })
 
 onMounted(() => {
-  const storedMusicQueue = localStorage.getItem('musicQueue')
+  const storedMusicQueue = localStorage.getItem('nazoMusicQueue')
   if (storedMusicQueue)
     musicQueue.value = JSON.parse(storedMusicQueue)
 })
