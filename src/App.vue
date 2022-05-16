@@ -8,6 +8,21 @@
 </template>
 
 <script setup lang="ts">
+import { storeToRefs } from 'pinia'
+import { useMusicQueueStore } from './store/MusicQueueStore'
+
+const MUSIC_QUEUE_STORE = useMusicQueueStore()
+const { musicQueue } = storeToRefs(MUSIC_QUEUE_STORE)
+
+MUSIC_QUEUE_STORE.$subscribe((state) => {
+  localStorage.setItem('musicQueue', JSON.stringify(musicQueue.value))
+})
+
+onMounted(() => {
+  const storedMusicQueue = localStorage.getItem('musicQueue')
+  if (storedMusicQueue)
+    musicQueue.value = JSON.parse(storedMusicQueue)
+})
 
 </script>
 
