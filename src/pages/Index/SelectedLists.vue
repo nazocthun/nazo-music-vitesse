@@ -30,8 +30,7 @@ const songListsData = ref<SongList[]>([] as SongList[])
 const { playSongListById } = useSongList()
 
 function toSongList(id: number) {
-  router.push(`/list?id=${id}`)
-  console.log(`toSongList${id}`)
+  router.push(`/list/${id}`)
 }
 const params = reactive({
   cat: '全部',
