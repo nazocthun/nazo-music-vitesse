@@ -1,10 +1,10 @@
 <template>
-  <div w="380px" h="550px" fixed right-2 bottom-16 rounded-t-md bg-white box-border text-sm shadow-2xl>
+  <div w="380px" h="550px" fixed right-2 bottom-16 rounded-md bg-white box-border text-sm shadow-2xl>
     <div h="550px">
       <el-tabs v-model="activeName" @tab-click="handleClick">
         <el-tab-pane label="播放列表" name="playList">
           <div flex text-stone-400 pb-2 mx-2 my-3 border-b border-t-0 border-l-0 border-r-0>
-            <div flex-1 ml-4>
+            <div flex-1 ml-4 cursor-default>
               共{{ musicQueue.length }}首
             </div>
             <div mr-4 text-orange-700 float-right cursor-pointer @click="clear">
@@ -72,19 +72,74 @@
               </li>
             </el-scrollbar>
           </ul>
+          <div
+            v-if="!musicQueue.length"
+            text-stone-400 cursor-default
+            absolute top="50%" left="50%"
+            translate-x="-50%" translate-y="-50%"
+          >
+            队列是空的
+          </div>
         </el-tab-pane>
         <el-tab-pane label="播放历史" name="history">
-          播放历史
+          <div flex text-stone-400 pb-2 mx-2 my-3 border-b border-t-0 border-l-0 border-r-0>
+            <div flex-1 ml-4 cursor-default>
+              共{{ musicHistory.length }}首
+            </div>
+            <div mr-4 text-orange-700 float-right cursor-pointer @click="clearHistory">
+              清空播放历史
+            </div>
+          </div>
+          <ul h="430px" p-0>
+            <el-scrollbar height="430px">
+              <li
+                v-for="music in musicHistory"
+                :key="music.id"
+                class="queue-item"
+                @dblclick="historyDoubleClick(music)"
+              >
+                <span flex w="92%">
+                  <span
+                    w="35%" ml-6 px-1 overflow-hidden text-ellipsis whitespace-nowrap
+                    :title="music.name"
+                  >
+                    {{ music.name }}
+                  </span>
+                  <span
+                    w="43.3%" cursor-pointer overflow-hidden text-ellipsis whitespace-nowrap text-sky-600
+                    hover="underline underline-offset-2"
+                    :title="artistsTitleString(music.artists)"
+                  >
+                    <span v-for="(artist , i) in music.artists" :key="i">
+                      <span
+                        hover="underline underline-offset-2"
+                        @click.stop="toArtist(artist.id)"
+                      >
+                        {{ artist.name }}
+                      </span>
+                      <span
+                        v-if="music.artists.length != 1 && i != music.artists.length - 1"
+                        text-gray-600 cursor-default
+                      >
+                        &nbsp;&amp;&nbsp;
+                      </span>
+                    </span>
+                  </span>
+                  <span px-1 w="16.7%" text-right>{{ music.time }}</span>
+                </span>
+              </li>
+            </el-scrollbar>
+          </ul>
+          <div
+            v-if="!musicHistory.length"
+            text-stone-400 cursor-default
+            absolute top="50%" left="50%"
+            translate-x="-50%" translate-y="-50%"
+          >
+            暂无播放历史
+          </div>
         </el-tab-pane>
       </el-tabs>
-      <div
-        v-if="!musicQueue.length"
-        text-stone-400 cursor-default
-        absolute top="50%" left="50%"
-        translate-x="-50%" translate-y="-50%"
-      >
-        队列是空的
-      </div>
     </div>
   </div>
 </template>
@@ -102,12 +157,12 @@ const MUSIC_QUEUE_STORE = useMusicQueueStore()
 const PLAY_STORE = usePlayStore()
 
 const { currentMusicInfo } = storeToRefs(MUSIC_INFO_STORE)
-const { nowIndex, musicQueue, deleteToNext } = storeToRefs(MUSIC_QUEUE_STORE)
+const { nowIndex, musicQueue, musicHistory, deleteToNext } = storeToRefs(MUSIC_QUEUE_STORE)
 const { changeQueueStyleTo, changeNowIndexTo, deleteMusicBy, toggleDeleteToNext } = MUSIC_QUEUE_STORE
 const { isPlaying } = storeToRefs(PLAY_STORE)
 
 const activeName = ref('playList')
-const { getMusicInfo, queueDoubleClick } = usePlay()
+const { getMusicInfo, queueDoubleClick, historyDoubleClick } = usePlay()
 
 function showPlayIcon(music: Music) {
   return music.id === currentMusicInfo.value.id && isPlaying.value
@@ -136,6 +191,35 @@ function clear() {
       MUSIC_INFO_STORE.reset()
       PLAY_STORE.reset()
       MUSIC_QUEUE_STORE.resetQueue()
+    }, 100)
+    ElMessage({
+      type: 'success',
+      message: '已清空',
+    })
+  }).catch(() => {
+    ElMessage({
+      type: 'info',
+      message: '已取消清空',
+    })
+  })
+}
+
+function clearHistory() {
+  if (musicHistory.value.length === 0) {
+    ElMessage({
+      message: '已经是空的了~',
+      type: 'warning',
+      showClose: true,
+    })
+    return
+  }
+  ElMessageBox.confirm('确定清空播放历史吗?', '提示', {
+    confirmButtonText: '确定',
+    cancelButtonText: '取消',
+    type: 'warning',
+  }).then(() => {
+    setTimeout(() => {
+      MUSIC_QUEUE_STORE.resetMusicHistory()
     }, 100)
     ElMessage({
       type: 'success',

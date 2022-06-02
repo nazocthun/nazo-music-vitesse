@@ -7,19 +7,30 @@ export default function useMusicQueue() {
   const MUSIC_INFO_STORE = useMusicInfoStore()
   const MUSIC_QUEUE_STORE = useMusicQueueStore()
   const PLAY_STORE = usePlayStore()
-  const { musicQueue, nowIndex } = storeToRefs(MUSIC_QUEUE_STORE)
-  const { changeQueueStyleTo, changeNowIndexTo, addToQueueWith } = MUSIC_QUEUE_STORE
+  const { musicQueue, musicHistory, nowIndex } = storeToRefs(MUSIC_QUEUE_STORE)
+  const {
+    changeQueueStyleTo,
+    changeNowIndexTo,
+    addToQueueWith,
+    addToHistoryWith,
+    musicQueueHasMusicBy,
+    getIndexByMusicId,
+  } = MUSIC_QUEUE_STORE
   const { musicChanged } = PLAY_STORE
 
-  function addToQueue(music: Music, from: 'doubleclick' | 'plus' | 'queue') {
+  function addToQueue(music: Music, from: 'doubleclick' | 'plus' | 'queue' | 'history') {
+    if (from === 'history') {
+      if (musicQueueHasMusicBy(music.id))
+        changeNowIndexTo(getIndexByMusicId(music.id))
+      else
+        addToQueueWith(music)
+      return
+    }
     if (from === 'queue') {
       changeNowIndexBy(music.id)
       return
     }
-    const ids: number[] = []
-    for (const item of musicQueue.value)
-      ids.push(item.id)
-    if (ids.includes(music.id)) {
+    if (musicQueueHasMusicBy(music.id)) {
       if (from === 'plus') {
         ElMessage({
           type: 'warning',
@@ -40,6 +51,11 @@ export default function useMusicQueue() {
     setTimeout(() => {
       changeQueueStyleTo('normal')
     }, 1000)
+  }
+
+  function addToHistory(music: Music) {
+    if (musicHistory.value[0] !== music)
+      addToHistoryWith(music)
   }
 
   function prevQueue() {
@@ -87,14 +103,14 @@ export default function useMusicQueue() {
   }
 
   function changeNowIndexBy(musicId: number) {
-    const ids: number[] = []
-    for (const item of musicQueue.value)
-      ids.push(item.id)
-    changeNowIndexTo(ids.indexOf(musicId))
+    const index = musicQueue.value.findIndex(item => item.id === musicId)
+    if (index !== -1)
+      changeNowIndexTo(index)
   }
 
   return {
     addToQueue,
+    addToHistory,
     prevQueue,
     nextQueue,
     changeNowIndexBy,
