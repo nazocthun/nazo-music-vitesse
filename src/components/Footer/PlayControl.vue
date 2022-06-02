@@ -1,5 +1,5 @@
 <template>
-  <div w-160 min-w-50 h-full mx-auto my-0 p-1 box-border flex>
+  <div w-180 min-w-50 h-full mx-auto my-0 p-1 box-border flex>
     <audio ref="audio" autoplay />
     <button @click="log">LOG</button>
     <div flex-1>
@@ -44,9 +44,26 @@
         <span text-xs cursor-default pl-3 w-10 text-center>{{ playControlTimeFormat(duration) }}</span>
       </div>
     </div>
-    <div w="25%" min-w-150px ml-12>
-      <div h="50%" />
+    <div w="25%" min-w-150px ml-3>
+      <div h="50%" w-full />
       <div flex items-center>
+        <div cursor-pointer w-5 h-5 mr-6>
+          <div
+            v-if="playMode ==='sequence'"
+            w-full h-full i-mdi-shuffle-disabled
+            @click="toggleMode"
+          />
+          <div
+            v-if="playMode ==='shuffle'"
+            w-full h-full i-mdi-shuffle
+            @click="toggleMode"
+          />
+          <div
+            v-if="playMode ==='loop'"
+            w-full h-full i-mdi-repeat-once
+            @click="toggleMode"
+          />
+        </div>
         <div cursor-pointer w-6 h-6 mr-1>
           <div
             v-if="volume > 0.5"
@@ -80,6 +97,7 @@
 
 <script setup lang="ts">
 import { storeToRefs } from 'pinia'
+import _ from 'lodash'
 import { playControlTimeFormat } from '@/utils/common'
 import { useMusicInfoStore } from '@/store/MusicInfoStore'
 import { useMusicQueueStore } from '@/store/MusicQueueStore'
@@ -93,8 +111,9 @@ const PLAY_STORE = usePlayStore()
 
 const { currentMusicUrl } = storeToRefs(MUSIC_INFO_STORE)
 const { musicQueue, nowIndex } = storeToRefs(MUSIC_QUEUE_STORE)
-const { isMusicChanged, isPlaying } = storeToRefs(PLAY_STORE)
+const { isMusicChanged, isPlaying, playMode } = storeToRefs(PLAY_STORE)
 
+const { musicChanged } = usePlayStore()
 const { prevQueue, nextQueue } = useMusicQueue()
 
 const audio = ref()
@@ -109,18 +128,23 @@ function log() {
 }
 // 播放控制
 const { getMusicInfo } = usePlay()
+defineExpose({ play })
 function play() {
-  if (musicQueue.value.length !== 0) {
-    // if (!playing.value)
-    getMusicInfo(musicQueue.value[nowIndex.value], 'queue')
-    useToggle(playing)()
-    return
+  if (currentMusicUrl.value === '') {
+    if (musicQueue.value.length !== 0) {
+      getMusicInfo(musicQueue.value[nowIndex.value], 'queue')
+    }
+    else {
+      ElMessage({
+        message: '队列中没有音乐',
+        type: 'warning',
+        showClose: true,
+      })
+    }
   }
-  ElMessage({
-    message: '队列中没有音乐',
-    type: 'warning',
-    showClose: true,
-  })
+  else {
+    useToggle(playing)()
+  }
 }
 
 function stop() {
@@ -136,15 +160,33 @@ function prev() {
 }
 
 function next() {
-  if (nextQueue()) {
-    getMusicInfo(musicQueue.value[nowIndex.value], 'queue')
-    return
+  if (playMode.value === 'shuffle') {
+    MUSIC_QUEUE_STORE.$patch((state) => {
+      if (state.shuffleMusicIndex.length === 0) {
+        state.shuffleMusicIndex = [...Array(state.musicQueue.length).keys()]
+        state.shuffleMusicIndex.splice(state.nowIndex, 1)
+        state.shuffleMusicIndex = _.shuffle(state.shuffleMusicIndex)
+      }
+      state.nowIndex = state.shuffleMusicIndex.shift() as number
+      musicChanged()
+    })
   }
-  stop()
+  else {
+    if (nextQueue())
+      getMusicInfo(musicQueue.value[nowIndex.value], 'queue')
+    else
+      stop()
+  }
 }
 
 whenever(ended, () => {
-  next()
+  if (playMode.value === 'loop') {
+    musicChanged()
+    useToggle(playing)()
+  }
+  else {
+    next()
+  }
   useToggle(ended)()
 })
 
@@ -175,6 +217,13 @@ function volumeTooltip(volume: number) {
   return `${volume * 100}%`
 }
 
+// 播放模式
+function toggleMode() {
+  const modes = ['sequence', 'shuffle', 'loop']
+  PLAY_STORE.$patch((state) => {
+    state.playMode = modes[(modes.indexOf(state.playMode) + 1) % 3]
+  })
+}
 // 音乐改变时重置时间 改变队列当前播放音乐
 watch(isMusicChanged, () => {
   currentTime.value = 0

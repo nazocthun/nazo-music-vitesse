@@ -17,6 +17,7 @@ specifiers:
   eslint: ^8.14.0
   eslint-plugin-n: ^14.0.0
   jsdom: ^19.0.0
+  lodash: ^4.17.21
   pinia: ^2.0.13
   pnpm: ^6.32.9
   sass: ^1.50.1
@@ -39,6 +40,7 @@ dependencies:
   axios: 0.26.1
   element-plus: 2.1.10_vue@3.2.33
   eslint-plugin-n: 14.0.0_eslint@8.14.0
+  lodash: 4.17.21
   pinia: 2.0.13_typescript@4.6.3+vue@3.2.33
   sass: 1.50.1
   vue: 3.2.33

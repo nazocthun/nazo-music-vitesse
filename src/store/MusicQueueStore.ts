@@ -3,10 +3,10 @@ import { acceptHMRUpdate, defineStore } from 'pinia'
 export const useMusicQueueStore = defineStore('musicQueueStore', () => {
   const nowIndex = ref(0)
   const musicQueue = ref<Music[]>([])
-  const shuffleMusicQueue = ref<Music[]>([])
+  const musicHistory = ref<Music[]>([])
+  const shuffleMusicIndex = ref<Number[]>([])
   const musicQueueStyle = ref('normal')
   const deleteToNext = ref(false)
-  const queuePlayStyle = ref('sequence')
   function changeQueueStyleTo(style: string) {
     musicQueueStyle.value = style
   }
@@ -16,41 +16,59 @@ export const useMusicQueueStore = defineStore('musicQueueStore', () => {
   function addToQueueWith(music: Music) {
     musicQueue.value.push(music)
   }
+  function addToHistoryWith(music: Music) {
+    const index = musicHistory.value.findIndex(item => item.id === music.id)
+    if (index !== -1)
+      musicHistory.value.splice(index, 1)
+    musicHistory.value.unshift(music)
+  }
   function deleteMusicBy(id: number) {
     for (let i = 0; i < musicQueue.value.length; i++) {
       if (musicQueue.value[i].id === id)
         musicQueue.value.splice(i, 1)
     }
   }
+  function getIndexByMusicId(id: number) {
+    for (let i = 0; i < musicQueue.value.length; i++) {
+      if (musicQueue.value[i].id === id)
+        return i
+    }
+    return -1
+  }
+  function musicQueueHasMusicBy(id: number) {
+    for (const music of musicQueue.value)
+      if (music.id === id) return true
+    return false
+  }
   function toggleDeleteToNext() {
     deleteToNext.value = !deleteToNext.value
-  }
-  function toggleQueuePlayStyle() {
-    const styles = ['sequence', 'loop', 'single-loop', 'shuffle']
-    const position = styles.indexOf(queuePlayStyle.value)
-    queuePlayStyle.value = styles[(position + 1) % styles.length]
   }
   function resetQueue() {
     nowIndex.value = 0
     musicQueue.value = []
-    shuffleMusicQueue.value = []
     musicQueueStyle.value = 'normal'
     deleteToNext.value = false
+  }
+  function resetMusicHistory() {
+    musicHistory.value = []
   }
   return {
     nowIndex,
     musicQueue,
-    shuffleMusicQueue,
+    musicHistory,
+    shuffleMusicIndex,
     musicQueueStyle,
     deleteToNext,
-    queuePlayStyle,
     changeQueueStyleTo,
     changeNowIndexTo,
     addToQueueWith,
+    addToHistoryWith,
+    getIndexByMusicId,
     deleteMusicBy,
+    musicQueueHasMusicBy,
     toggleDeleteToNext,
-    toggleQueuePlayStyle,
     resetQueue,
+    resetMusicHistory,
   }
 })
 

@@ -4,6 +4,7 @@ export const usePlayStore = defineStore('playStore', () => {
   const location = ref('')
   const isMusicChanged = ref(false)
   const isPlaying = ref(false)
+  const playMode = ref('sequence')
 
   function musicChanged() {
     isMusicChanged.value = !isMusicChanged.value
@@ -17,6 +18,7 @@ export const usePlayStore = defineStore('playStore', () => {
     location,
     isMusicChanged,
     isPlaying,
+    playMode,
     musicChanged,
     reset,
   }
