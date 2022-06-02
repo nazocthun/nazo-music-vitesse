@@ -10,12 +10,14 @@ export default function useSongList() {
   async function playSongList(trackIds: Number[]) {
     let allMusic: Music[] = []
     if (trackIds.length !== 0) {
-      await getSongDetail({
-        ids: trackIds.join(','),
-        realIP: '116.25.146.177',
-      }).then((res) => {
-        allMusic = res ?? []
-      })
+      for (let i = 0; i < Math.ceil(trackIds.length / 200); i++) {
+        await getSongDetail({
+          ids: trackIds.slice(i * 200, (i + 1) * 200).join(','),
+          realIP: '116.25.146.177',
+        }).then((res) => {
+          allMusic = allMusic.concat(res)
+        })
+      }
     }
     if (allMusic.length > 0) {
       MUSIC_QUEUE_STORE.resetQueue()
