@@ -1,6 +1,6 @@
 <template>
   <el-scrollbar ref="scrollBar" style="height:100%" @scroll="scroll">
-    <div max-w="1300px" mx-auto p-5>
+    <div class="whole-page" mx-auto p-5>
       <div w-full>
         <el-tabs v-model="activeName" @tab-click="handleClick">
           <el-tab-pane label="全部" name="0" />
@@ -61,6 +61,12 @@ onMounted(() => {
 })
 
 </script>
+
+<style>
+.whole-page {
+  max-width: min(calc(100vw - 251px), 1300px);
+}
+</style>
 
 <route>
 {

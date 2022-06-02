@@ -1,6 +1,6 @@
 <template>
   <el-scrollbar ref="scrollBar" @scroll="scroll">
-    <div v-loading="loading" max-w="1300px" my-0 mx-auto p-5>
+    <div v-loading="loading" class="whole-page" my-0 mx-auto p-5>
       <div flex text-sm mb-5>
         <div w-50 h-50 mr="50px">
           <CoverLazy :src="artistInfo.picUrl" />
@@ -229,16 +229,10 @@ watch(() => props.artistId, () => {
 
 </script>
 
-<style scoped>
-
-/* .artist :deep(.el-tabs__item){
-  @apply text-sm
-} */
-
-/* .artist :deep(.el-loading-spinner) {
-  @apply top-[15%]
-} */
-
+<style>
+.whole-page {
+  max-width: min(calc(100vw - 251px), 1300px);
+}
 </style>
 
 <route>

@@ -1,6 +1,6 @@
 <template>
   <div w-full h-full bg-stone-500:10 rounded-xl>
-    <el-image rounded-xl :src="props.src">
+    <el-image rounded-xl shadow-lg :src="props.src">
       <template #placeholder>
         <div w-full h-full flex justify-center items-center>
           <div w="33%" h="33%" i-mdi-loading animate-spin />

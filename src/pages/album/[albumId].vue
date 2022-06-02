@@ -1,5 +1,5 @@
 <template>
-  <div v-loading="loading" max-w="1300px" mx-auto p-5>
+  <div v-loading="loading" class="whole-page" mx-auto p-5>
     <div class="flex">
       <div w-50 aspect-square>
         <CoverLazy :src="albumInfo.picUrl" />
@@ -100,3 +100,9 @@ onMounted(() => {
   init()
 })
 </script>
+
+<style>
+.whole-page {
+  max-width: min(calc(100vw - 251px), 1300px);
+}
+</style>

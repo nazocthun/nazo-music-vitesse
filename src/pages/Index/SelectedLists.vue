@@ -1,7 +1,7 @@
 <template>
   <el-scrollbar ref="scrollBar" style="height:100%" @scroll="scroll">
-    <div max-w="1300px" my-0 mx-auto p-5>
-      <el-tabs v-model="activeName" @tab-click="handleClick">
+    <div class="whole-page" my-0 mx-auto p-5>
+      <el-tabs v-model="activeName" w-full @tab-click="handleClick">
         <el-tab-pane label="全部" name="全部" />
         <el-tab-pane v-for="(tag, index) in tags" :key="index" :label="tag.toString()" :name="tag.toString()" />
       </el-tabs>
@@ -55,7 +55,7 @@ function init() {
   params.before = 0
   getSelectedSongList(params).then((res) => {
     songListsData.value = res.songList
-    params.before = res.lastTime
+    params.before = res.lastTime!
     more.value = res.more
   }).then(() => {
     loading.value = false
@@ -72,7 +72,7 @@ async function loadMore() {
     if (res.songList.length === 0) return
     for (const item of res.songList)
       songListsData.value.push(item)
-    params.before = res.lastTime
+    params.before = res.lastTime!
     more.value = res.more
   })
 }
@@ -85,6 +85,12 @@ function scroll({ scrollTop }: { scrollTop: number }) {
 const scrollBar = ref()
 onActivated(() => scrollBar.value.setScrollTop(currentScrollTop.value))
 </script>
+
+<style>
+.whole-page {
+  max-width: min(calc(100vw - 251px), 1300px);
+}
+</style>
 
 <route>
 {
