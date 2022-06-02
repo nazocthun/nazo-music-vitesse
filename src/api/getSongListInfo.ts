@@ -39,6 +39,7 @@ export const convertSelectedTags = async(res: AxiosResponse<any>): Promise<Strin
     return item.name
   })
 }
+
 /**
  *
  * @returns string[], 歌单标签
@@ -76,6 +77,29 @@ export const convertSelectedSongList = async(res: AxiosResponse<any>): Promise<S
  */
 export const getSelectedSongList = (params = {}) => {
   return getRequest(REQUEST_URL.selected, params).then(convertSelectedSongList)
+}
+
+// 获取自定义歌单
+export const convertSelfMadeSongList = async(res: AxiosResponse<any>): Promise<SongListWrapper> => {
+  const songListInfo = res.data.playlists
+  return {
+    songList: songListInfo.map((item: { name: any; id: any; coverImgUrl: string; trackCount: any; createTime: Date; updateTime: Date }) => {
+      return {
+        name: item.name,
+        id: item.id,
+        picUrl: getCompressedImgUrl(item.coverImgUrl, 500),
+        trackCount: item.trackCount,
+        publishTime: formatDate(new Date(item.createTime)),
+        updateTime: formatDate(new Date(item.updateTime)),
+      }
+    }),
+    more: res.data.more,
+    total: res.data.total,
+  }
+}
+
+export const getSelfMadeSongList = (params = {}) => {
+  return getRequest(REQUEST_URL.selfmade, params).then(convertSelfMadeSongList)
 }
 
 // 用 tracksID 获取歌单歌曲
