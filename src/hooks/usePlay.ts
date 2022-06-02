@@ -4,11 +4,11 @@ import { useMusicInfoStore } from '@/store/MusicInfoStore'
 import { usePlayStore } from '@/store/PlayStore'
 
 export default function usePlay() {
-  const { addToQueue } = useMusicQueue()
+  const { addToQueue, addToHistory } = useMusicQueue()
   const MUSIC_INFO_STORE = useMusicInfoStore()
   const PLAY_STORE = usePlayStore()
   // 播放音乐
-  function getMusicInfo(row: Music, from: 'doubleclick' | 'plus' | 'queue') {
+  function getMusicInfo(row: Music, from: 'doubleclick' | 'plus' | 'queue' | 'history') {
     PLAY_STORE.$patch((state) => {
       state.location = from
     })
@@ -25,6 +25,8 @@ export default function usePlay() {
       })
     })
     addToQueue(row, from)
+    if (from !== 'history')
+      addToHistory(row)
   }
 
   function rowDoubleClick(row: Music) {
@@ -35,9 +37,13 @@ export default function usePlay() {
     getMusicInfo(row, 'queue')
   }
 
+  function historyDoubleClick(row: Music) {
+    getMusicInfo(row, 'history')
+  }
   return {
     getMusicInfo,
     rowDoubleClick,
     queueDoubleClick,
+    historyDoubleClick,
   }
 }
