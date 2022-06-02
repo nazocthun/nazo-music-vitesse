@@ -1,7 +1,7 @@
 <template>
   <div ref="bottomZone" flex items-center>
     <MusicInfo />
-    <PlayControl />
+    <PlayControl ref="playControl" />
     <div w="10%">
       <el-tooltip content="播放队列" placement="top" effect="light">
         <div
@@ -34,6 +34,7 @@ const { musicQueue, musicQueueStyle } = storeToRefs(MUSIC_QUEUE_STORE)
 
 const showQueue = ref(false)
 const bottomZone = ref()
+const playControl = ref()
 const queue = ref(null)
 
 const toggleQueue = useToggle(showQueue)
@@ -42,6 +43,11 @@ onClickOutside(queue, () => {
   if (showQueue.value)
     toggleQueue()
 }, { ignore: [bottomZone] })
+
+defineExpose({ spaceDown })
+function spaceDown() {
+  playControl.value.play()
+}
 
 </script>
 
