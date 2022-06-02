@@ -69,7 +69,7 @@ declare interface SongList {
 
 declare interface SongListWrapper {
   songList: SongList[]
-  lastTime: number
+  lastTime?: number
   more: boolean
   total: number
 }
