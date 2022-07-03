@@ -53,7 +53,6 @@ async function loadMore() {
   })
 }
 
-onMounted(() => init())
 // keep-alive记住滚动条位置
 const currentScrollTop = ref(0)
 function scroll({ scrollTop }: { scrollTop: number }) {

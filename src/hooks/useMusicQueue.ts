@@ -8,29 +8,30 @@ export default function useMusicQueue() {
   const MUSIC_QUEUE_STORE = useMusicQueueStore()
   const PLAY_STORE = usePlayStore()
   const { musicQueue, musicHistory, nowIndex } = storeToRefs(MUSIC_QUEUE_STORE)
-  const {
-    changeQueueStyleTo,
-    changeNowIndexTo,
-    addToQueueWith,
-    addToHistoryWith,
-    musicQueueHasMusicBy,
-    getIndexByMusicId,
-  } = MUSIC_QUEUE_STORE
+  const { changeQueueStyleTo, changeNowIndexTo, addToQueueWith, addToHistoryWith } = MUSIC_QUEUE_STORE
   const { musicChanged } = PLAY_STORE
 
   function addToQueue(music: Music, from: 'doubleclick' | 'plus' | 'queue' | 'history') {
     if (from === 'history') {
-      if (musicQueueHasMusicBy(music.id))
-        changeNowIndexTo(getIndexByMusicId(music.id))
-      else
-        addToQueueWith(music)
+      const flag = musicQueue.value.includes(music)
+      console.log(musicQueue.value)
+      console.log(flag)
+      if (flag) {
+        const index = musicQueue.value.indexOf(music)
+        console.log(index)
+        musicQueue.value.splice(index, 1)
+      }
+      addToQueueWith(music)
       return
     }
     if (from === 'queue') {
       changeNowIndexBy(music.id)
       return
     }
-    if (musicQueueHasMusicBy(music.id)) {
+    const ids: number[] = []
+    for (const item of musicQueue.value)
+      ids.push(item.id)
+    if (ids.includes(music.id)) {
       if (from === 'plus') {
         ElMessage({
           type: 'warning',
@@ -103,9 +104,10 @@ export default function useMusicQueue() {
   }
 
   function changeNowIndexBy(musicId: number) {
-    const index = musicQueue.value.findIndex(item => item.id === musicId)
-    if (index !== -1)
-      changeNowIndexTo(index)
+    const ids: number[] = []
+    for (const item of musicQueue.value)
+      ids.push(item.id)
+    changeNowIndexTo(ids.indexOf(musicId))
   }
 
   return {

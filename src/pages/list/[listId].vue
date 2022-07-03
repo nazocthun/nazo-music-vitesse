@@ -12,17 +12,16 @@
           {{ songListInfo.name }}
         </div>
         <div items-center text-sm>
-          <div mx="10px" my-5>
-            创建者ID：{{ songListInfo.userId }}
+          <div flex="~" items-center my-5>
+            <img h-6 w-6 rounded-full mr-2 border="~ solid orange-700" :src="userDetail.avatarUrl">
+            {{ userDetail.nickname }} {{ songListInfo.publishTime }}创建
           </div>
-          <div mx="10px" my-5>
-            创建时间：{{ songListInfo.publishTime }}
-          </div>
-          <div mx="10px" my-5>
-            共{{ songListInfo.trackCount }}首
+          <div my-5>
+            歌曲数：{{ songListInfo.trackCount }}
           </div>
         </div>
-        <div inline-block mr-2 rounded-2xl bg-orange-700 py-1 px-4 text-white cursor-pointer @click="playSongList(trackIds)">
+        <div inline-block mr-2 rounded-2xl bg-orange-700 py-1 px-4 text-white cursor-pointer
+          @click="playSongList(trackIds)">
           播放全部
         </div>
       </div>
@@ -30,28 +29,14 @@
     <el-tabs v-model="activeName" @tab-click="handleClick">
       <el-tab-pane label="歌曲列表" name="music">
         <div w-full>
-          <MusicTable
-            ref="musicTable"
-            :data="tableData"
-            :loading="false"
-            :pic="true"
-            :album="true"
-            :more="more"
-            :max-height="'530px'"
-            style="height: auto;"
-            @load-more="loadMore"
-          />
+          <MusicTable ref="musicTable" :data="tableData" :loading="false" :pic="true" :album="true" :more="more"
+            :max-height="'530px'" style="height: auto;" @load-more="loadMore" />
         </div>
       </el-tab-pane>
       <el-tab-pane label="评论" name="comment" :lazy="true" />
       <el-tab-pane label="相似歌单" name="similarLists" :lazy="true">
-        <CoverView
-          :data="simlilarListsData"
-          :more="false"
-          :show-more="false"
-          @play="playSongListById"
-          @to="toSongList"
-        />
+        <CoverView :data="simlilarListsData" :more="false" :show-more="false" @play="playSongListById"
+          @to="toSongList" />
       </el-tab-pane>
     </el-tabs>
   </div>
@@ -63,6 +48,7 @@ import { onBeforeRouteUpdate } from 'vue-router'
 import useSongList from '@/hooks/useSongList'
 import { getSimilarSongList, getSongListDetail } from '@/api/getSongListInfo'
 import { getSongDetail } from '@/api/getSongDetail'
+import { getUserDetail } from '@/api/getUserName'
 
 const props = defineProps<{ listId: string }>()
 const loading = ref(true)
@@ -78,6 +64,7 @@ const params = {
 const songListInfo = ref<SongList>({} as SongList)
 const tableData = ref<Music[]>([] as Music[])
 const trackIds = ref<Number[]>([] as Number[])
+const userDetail = ref<User>({} as User)
 const offset = ref(0)
 const more = ref(true)
 
@@ -86,6 +73,9 @@ async function init() {
     songListInfo.value = res
     trackIds.value = res.trackIds
     offset.value = 0
+  })
+  await getUserDetail({ uid: songListInfo.value.userId }).then((res) => {
+    userDetail.value = res
   })
   await getSongDetail({
     ids: getTrackIdsByOffset(offset.value),
@@ -125,6 +115,8 @@ function loadMore() {
     tableData.value = tableData.value.concat(res)
   })
 }
+
+// 获取创建者信息
 
 // 获取相似歌单
 const simlilarListsData = ref<SongList[]>([] as SongList[])

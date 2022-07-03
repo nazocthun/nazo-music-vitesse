@@ -128,7 +128,7 @@ function log() {
 }
 // 播放控制
 const { getMusicInfo } = usePlay()
-defineExpose({ play })
+defineExpose({ play, stop })
 function play() {
   if (currentMusicUrl.value === '') {
     if (musicQueue.value.length !== 0) {
@@ -149,9 +149,12 @@ function play() {
 
 function stop() {
   playing.value = false
+  audioTime.value = 0
   currentTime.value = 0
-  duration.value = 0
   currentMusicUrl.value = ''
+  setTimeout(() => {
+    duration.value = 0
+  }, 50)
 }
 
 function prev() {

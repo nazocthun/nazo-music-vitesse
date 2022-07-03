@@ -4,9 +4,13 @@
 
 declare module 'vue' {
   export interface GlobalComponents {
+    BannerView: typeof import('./src/components/BannerView.vue')['default']
     BottomZone: typeof import('./src/components/Footer/BottomZone.vue')['default']
+    CommentsView: typeof import('./src/components/CommentsView.vue')['default']
     CoverLazy: typeof import('./src/components/CoverLazy.vue')['default']
     CoverView: typeof import('./src/components/CoverView.vue')['default']
+    ElCarousel: typeof import('element-plus/es')['ElCarousel']
+    ElCarouselItem: typeof import('element-plus/es')['ElCarouselItem']
     ElContainer: typeof import('element-plus/es')['ElContainer']
     ElImage: typeof import('element-plus/es')['ElImage']
     ElInput: typeof import('element-plus/es')['ElInput']

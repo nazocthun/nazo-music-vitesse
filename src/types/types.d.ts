@@ -57,11 +57,12 @@ declare interface musicUrl {
 declare interface SongList {
   id: number // 歌单id
   name: string // 歌单名
+  trackCount: number // 歌曲数量
   picUrl?: string // 歌单封面url
   userId?: string // 创建者id
   description?: string // 歌单描述
+  playCount?: number // 播放次数
   tags?: string[] // 歌单标签
-  trackCount: number // 歌曲数量
   publishTime?: number | string // 创建时间
   updateTime?: number | string // 更新时间
   trackIds: number[]
@@ -72,4 +73,29 @@ declare interface SongListWrapper {
   lastTime?: number
   more: boolean
   total: number
+}
+
+declare interface User {
+  userId: number
+  nickname: string
+  avatarUrl: string
+}
+
+declare interface Comment {
+  user: User
+  time: number
+  timeStr: string
+  beRepliedComment: beRepliedComment[]
+  likedCount: number
+}
+
+declare interface beRepliedComment {
+  user: User
+  content: string
+}
+
+declare interface Banner {
+  imageUrl: string
+  targetType: number
+  targetId: number
 }

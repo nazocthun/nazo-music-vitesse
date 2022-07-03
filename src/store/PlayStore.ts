@@ -11,7 +11,6 @@ export const usePlayStore = defineStore('playStore', () => {
   }
   function reset() {
     location.value = ''
-    isMusicChanged.value = false
     isPlaying.value = false
   }
   return {

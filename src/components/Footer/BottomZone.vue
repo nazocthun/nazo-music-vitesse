@@ -19,7 +19,7 @@
       </el-tooltip>
     </div>
     <transition name="fade">
-      <MusicQueue v-show="showQueue" ref="queue" />
+      <MusicQueue v-show="showQueue" ref="queue" @clear="stop" />
     </transition>
   </div>
 </template>
@@ -47,6 +47,10 @@ onClickOutside(queue, () => {
 defineExpose({ spaceDown })
 function spaceDown() {
   playControl.value.play()
+}
+
+function stop() {
+  playControl.value.stop()
 }
 
 </script>

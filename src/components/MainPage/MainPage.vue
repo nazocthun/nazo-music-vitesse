@@ -11,7 +11,7 @@
         <li>
           <div i-ic-sharp-featured-play-list />
           <router-link to="/customlists">
-            网友歌单
+            发现歌单
           </router-link>
         </li>
         <li>

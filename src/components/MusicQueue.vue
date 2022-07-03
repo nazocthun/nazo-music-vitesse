@@ -172,6 +172,7 @@ function handleClick(tab: any) {
   // console.log(tab)
 }
 
+const em = defineEmits(['clear'])
 function clear() {
   if (musicQueue.value.length === 0) {
     ElMessage({
@@ -191,6 +192,7 @@ function clear() {
       MUSIC_INFO_STORE.reset()
       PLAY_STORE.reset()
       MUSIC_QUEUE_STORE.resetQueue()
+      em('clear')
     }, 100)
     ElMessage({
       type: 'success',
@@ -296,7 +298,8 @@ watch(deleteToNext, () => {
 })
 
 watch(nowIndex, () => {
-  getMusicInfo(musicQueue.value[nowIndex.value], 'queue')
+  // if (isPlaying.value)
+    getMusicInfo(musicQueue.value[nowIndex.value], 'queue')
 })
 
 const router = useRouter()
