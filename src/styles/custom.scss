@@ -10,7 +10,13 @@
   $slider: (
     'runway-bg-color': rgba(57, 62, 70, 0.7),
     'button-size': 13px,
+  ),
+  $carousel: (
+    'indicator-width': 8px,
+    'indicator-height': 8px,
+    'indicator-out-color': rgba(194, 65, 12, 0.9),
   )
+
 );
 
 $custom_hover_color : rgba(194, 65, 12, 0.3);
