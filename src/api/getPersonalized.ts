@@ -7,3 +7,21 @@ const REQUEST_URL = {
   mv: '/personalized/mv',
   newsong: '/personalized/newsong',
 }
+
+export const convertPersonalizedSongList = (res: AxiosResponse<any>): Promise<SongList[]> => {
+  const songListInfo = res.data.result
+  return songListInfo.map((item: { id: any; name: any; picUrl: string; trackCount: any; trackNumberUpdateTime: string | number | Date }) => {
+    return {
+      id: item.id,
+      name: item.name,
+      picUrl: getCompressedImgUrl(item.picUrl, 500),
+      trackCount: item.trackCount,
+      updateTime: formatDate(new Date(item.trackNumberUpdateTime)),
+      // playCount: item.playCount,
+    }
+  })
+}
+
+export const getPersonalizedSongList = async(params = {}) => {
+  return getRequest(REQUEST_URL.songlist, params).then(convertPersonalizedSongList)
+}
