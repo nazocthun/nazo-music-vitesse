@@ -9,6 +9,7 @@ else
   baseURL = 'https://netease-cloud-music-api-eight-ivory.vercel.app'
 
 const http = axios.create({
+  withCredentials: true,
   baseURL,
   timeout: 5000,
 })
@@ -30,7 +31,12 @@ http.interceptors.response.use(
 )
 
 export const getRequest = (url: string, params = {}) => {
-  return http.get(url, { params: { ...params } })
+  return http.get(
+    url,
+    {
+      params: { ...params, cookie: encodeURIComponent(document.cookie) },
+    },
+  )
 }
 
 export default http
