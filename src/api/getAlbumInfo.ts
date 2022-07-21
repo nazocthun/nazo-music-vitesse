@@ -49,34 +49,3 @@ export const convertAlbumInfo = async(res: AxiosResponse<any>): Promise<Album> =
 export const getAlbumInfo = (params = {}) => {
   return getRequest(REQUEST_URL.info, params).then(convertAlbumInfo)
 }
-
-export const convertAlbumComment = async(res: AxiosResponse<any>): Promise<Comment[]> => {
-  const commentList = res.data.comments
-  return commentList.map((item: { user: { userId: any; nickname: any; avatarUrl: any }; commentId: any; content: any; time: any; timeStr: any; beRepliedComment: { user: { userId: any; nickname: any; avatarUrl: any }; content: any }[] }) => {
-    return {
-      user: {
-        userId: item.user.userId,
-        nickname: item.user.nickname,
-        avatarUrl: item.user.avatarUrl,
-      },
-      commentId: item.commentId,
-      content: item.content,
-      time: item.time,
-      timeStr: item.timeStr,
-      beRepliedComment: item.beRepliedComment.map((item: { user: { userId: any; nickname: any; avatarUrl: any }; content: any }) => {
-        return {
-          user: {
-            userId: item.user.userId,
-            nickname: item.user.nickname,
-            avatarUrl: item.user.avatarUrl,
-          },
-          content: item.content,
-        }
-      }),
-    }
-  })
-}
-
-export const getAlbumComment = (params = {}) => {
-  return getRequest(REQUEST_URL.comment, params).then(convertAlbumComment)
-}
