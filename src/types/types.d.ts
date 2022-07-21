@@ -38,9 +38,11 @@ declare interface MV {
   picUrl: string
   artist: ArtistSimple
   playCount: number | string
+  maxr?: number
   publishTime?: string
   duration?: string
   time?: string
+  desc?: string
 }
 
 declare interface albumTopInfoTypes {
@@ -57,7 +59,7 @@ declare interface musicUrl {
 declare interface SongList {
   id: number // 歌单id
   name: string // 歌单名
-  trackCount: number // 歌曲数量
+  trackCount?: number // 歌曲数量
   picUrl?: string // 歌单封面url
   userId?: string // 创建者id
   description?: string // 歌单描述
@@ -81,12 +83,13 @@ declare interface User {
   avatarUrl: string
 }
 
-declare interface Comment {
+declare interface MusicComment {
   user: User
   time: number
   timeStr: string
   beRepliedComment: beRepliedComment[]
   likedCount: number
+  content: string
 }
 
 declare interface beRepliedComment {
