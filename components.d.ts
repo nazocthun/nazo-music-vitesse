@@ -6,6 +6,7 @@ declare module 'vue' {
   export interface GlobalComponents {
     BannerView: typeof import('./src/components/BannerView.vue')['default']
     BottomZone: typeof import('./src/components/Footer/BottomZone.vue')['default']
+    CommentBar: typeof import('./src/components/CommentBar.vue')['default']
     CommentsView: typeof import('./src/components/CommentsView.vue')['default']
     CoverLazy: typeof import('./src/components/CoverLazy.vue')['default']
     CoverView: typeof import('./src/components/CoverView.vue')['default']

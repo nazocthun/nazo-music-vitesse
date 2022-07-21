@@ -50,6 +50,7 @@ export default defineConfig({
       ],
       dts: true,
     }),
+
     // https://github.com/antfu/vite-plugin-components
     Components({
       resolvers: [ElementPlusResolver({
@@ -71,10 +72,6 @@ export default defineConfig({
         transformerDirective(),
       ],
     }),
-
-    // ElementPlus({
-    //   useSource: false,
-    // }),
   ],
 
   // https://github.com/vitest-dev/vitest
