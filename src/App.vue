@@ -9,11 +9,15 @@
 
 <script setup lang="ts">
 import { storeToRefs } from 'pinia'
+import { loginAnonimous } from './api/login'
+import { useCookieStore } from './store/CookieStore'
 import { useMusicInfoStore } from './store/MusicInfoStore'
 import { useMusicQueueStore } from './store/MusicQueueStore'
 
 const MUSIC_QUEUE_STORE = useMusicQueueStore()
 const MUSIC_INFO_STORE = useMusicInfoStore()
+const COOKIE_STORE = useCookieStore()
+const { cookie } = storeToRefs(COOKIE_STORE)
 const { nowIndex, musicQueue, musicHistory } = storeToRefs(MUSIC_QUEUE_STORE)
 
 MUSIC_QUEUE_STORE.$subscribe((state) => {
@@ -33,7 +37,23 @@ onKeyStroke([' ', 'VK_SPACE', 'kVK_Space'], (e: KeyboardEvent) => {
   e.preventDefault()
 })
 
+function checkLoginStatus() {
+  // if (document.cookie.length > 1) {
+  //   console.log('loged')
+  //   cookie.value = document.cookie
+  // }
+  // else {
+  loginAnonimous().then((res) => {
+    res.map((item) => {
+      return document.cookie = item
+    })
+  })
+  console.log(`临时cookie: ${document.cookie}`)
+// }
+}
+
 onMounted(() => {
+  checkLoginStatus()
   const storedMusicQueue = localStorage.getItem('nazoMusicQueue')
   const storedMusicHistory = localStorage.getItem('nazoMusicHistory')
   if (storedMusicQueue)
@@ -57,5 +77,10 @@ html, body{
 }
 .mainpage {
   height: calc(100vh - 128px);
+}
+
+.whole-page {
+  max-width: min(calc(100vw - 251px), 1300px);
+  min-width: 1104px;
 }
 </style>
