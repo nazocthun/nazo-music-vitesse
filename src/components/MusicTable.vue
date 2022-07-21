@@ -4,8 +4,11 @@
       ref="table"
       v-table-infinite-scroll="loadMore"
       v-table-scroll="scroll"
+      v-loading="props.loading"
+      stripe
+      empty-text="加载中"
+      style="width: 100%"
       :data="tableData"
-      stripe style="width: 100%"
       :max-height="props.maxHeight"
       @row-dblclick="rowDoubleClick"
     >
@@ -42,7 +45,7 @@
           <span :title="artistsTitleString(scope.row.artists)">
             <span v-for="(artist, i) in scope.row.artists" :key="i" overflow-hidden text-ellipsis whitespace-nowrap>
               <span cursor-pointer text-sky-600 hover="underline underline-offset-2" @click="toArtist(artist.id)">{{ artist.name }}</span>
-              <span v-show="scope.row.artists.length != 1 && i!=scope.row.artists.length-1" text-gray-600 cursor-default>&nbsp;&amp;&nbsp;</span>
+              <span v-show="scope.row.artists.length !== 1 && i !== scope.row.artists.length - 1" text-gray-600 cursor-default>&nbsp;&amp;&nbsp;</span>
             </span>
           </span>
         </template>
@@ -131,6 +134,7 @@ const props = defineProps({
     required: false,
   },
 })
+const em = defineEmits(['loadMore'])
 const tableData = ref<Music[]>([] as Music[])
 
 watch(props, () => {
@@ -149,7 +153,6 @@ function toAlbum(id: any) {
   router.push(`/album/${id}`)
 }
 
-const em = defineEmits(['loadMore'])
 function loadMore() {
   em('loadMore')
 }
@@ -171,7 +174,6 @@ onBeforeRouteUpdate((to, from) => {
   if (to.name === from.name && to.path !== from.path)
     currentScrollTop.value = 0
 })
-
 </script>
 
 <style>
