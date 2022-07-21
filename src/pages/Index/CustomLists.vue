@@ -5,6 +5,7 @@
         :data="songListsData"
         :more="more"
         :show-more="true"
+        :show-time="true"
         @load-more="loadMore"
         @play="playSongListById"
         @to="toSongList"
@@ -32,16 +33,6 @@ const params = reactive({
   realIP: '116.25.146.177',
 })
 
-function init() {
-  loading.value = true
-  getSelfMadeSongList(params).then((res) => {
-    songListsData.value = res.songList
-    params.offset += 20
-    more.value = res.more
-  }).then(() => {
-    loading.value = false
-  })
-}
 
 async function loadMore() {
   await getSelfMadeSongList(params).then((res) => {
@@ -55,17 +46,34 @@ async function loadMore() {
 
 // keep-alive记住滚动条位置
 const currentScrollTop = ref(0)
-function scroll({ scrollTop }: { scrollTop: number }) {
+
+const scrollDebouncedFn = useDebounceFn((scrollTop) => {
   currentScrollTop.value = scrollTop
+}, 500, { maxWait: 2000 })
+
+const scroll = ({ scrollTop }: { scrollTop: number }) => {
+  scrollDebouncedFn(scrollTop)
 }
+
 const scrollBar = ref()
 onActivated(() => scrollBar.value.setScrollTop(currentScrollTop.value))
+
+// init
+onMounted(() => init())
+function init() {
+  loading.value = true
+  getSelfMadeSongList(params).then((res) => {
+    songListsData.value = res.songList
+    params.offset += 20
+    more.value = res.more
+  }).then(() => {
+    loading.value = false
+  })
+}
 </script>
 
 <style>
-.whole-page {
-  max-width: min(calc(100vw - 251px), 1300px);
-}
+
 </style>
 
 <route>
