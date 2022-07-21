@@ -16,6 +16,7 @@
     </div>
   </el-scrollbar>
 </template>
+
 <script setup lang="ts">
 import { getSelectedSongList, getSelectedTags } from '@/api/getSongListInfo'
 import useSongList from '@/hooks/useSongList'
@@ -69,7 +70,8 @@ function handleClick() {
 // 滚动加载
 async function loadMore() {
   await getSelectedSongList(params).then((res) => {
-    if (res.songList.length === 0) return
+    if (res.songList.length === 0)
+      return
     for (const item of res.songList)
       songListsData.value.push(item)
     params.before = res.lastTime!
@@ -79,17 +81,19 @@ async function loadMore() {
 
 // keep-alive记住滚动条位置
 const currentScrollTop = ref(0)
-function scroll({ scrollTop }: { scrollTop: number }) {
+const scrollDebouncedFn = useDebounceFn((scrollTop) => {
   currentScrollTop.value = scrollTop
+}, 500, { maxWait: 2000 })
+
+const scroll = ({ scrollTop }: { scrollTop: number }) => {
+  scrollDebouncedFn(scrollTop)
 }
 const scrollBar = ref()
 onActivated(() => scrollBar.value.setScrollTop(currentScrollTop.value))
 </script>
 
 <style>
-.whole-page {
-  max-width: min(calc(100vw - 251px), 1300px);
-}
+
 </style>
 
 <route>

@@ -1,8 +1,10 @@
 <template>
   <el-scrollbar ref="scrollBar" style="height:100%" @scroll="scroll">
     <div class="whole-page" mx-auto p-5>
-      <BannerView m-3 :banners="banners" />
-      <div m-3 text="xl" font-bold>推荐歌单</div>
+      <BannerView w="1080px" p-3 mx-auto />
+      <div m-3 text="xl" font-bold>
+        推荐歌单
+      </div>
       <CoverView
         :data="personlizedSongList"
         :more="false"
@@ -15,31 +17,31 @@
 </template>
 
 <script setup lang="ts">
-import { getBanner } from '@/api/getBanner'
 import { getPersonalizedSongList } from '@/api/getPersonalized'
 import useSongList from '@/hooks/useSongList'
 
 const router = useRouter()
-const banners = ref<Banner[]>([])
 const personlizedSongList = ref<SongList[]>([])
 const { playSongListById } = useSongList()
 
 // keep-alive记住滚动条位置
 const currentScrollTop = ref(0)
-function scroll({ scrollTop }: { scrollTop: number }) {
+const scrollDebouncedFn = useDebounceFn((scrollTop) => {
   currentScrollTop.value = scrollTop
+}, 500, { maxWait: 2000 })
+
+const scroll = ({ scrollTop }: { scrollTop: number }) => {
+  scrollDebouncedFn(scrollTop)
 }
+
 const scrollBar = ref()
 onActivated(() => scrollBar.value.setScrollTop(currentScrollTop.value))
 
+// init
 onMounted(() => init())
 function init() {
-  getBanner({ type: 0 }).then((res) => {
-    banners.value = res
-  })
   getPersonalizedSongList({ limit: 10 }).then((res) => {
     personlizedSongList.value = res
-    console.log(personlizedSongList.value)
   })
 }
 

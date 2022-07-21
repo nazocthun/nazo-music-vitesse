@@ -14,7 +14,7 @@
           :loading="loading"
           :pic="true"
           :album="true"
-          :height="'100%'"
+          height="100%"
           :show-more="false"
         />
       </div>
@@ -50,22 +50,21 @@ function init() {
 
 // keep-alive记住滚动条位置
 const currentScrollTop = ref(0)
-function scroll({ scrollTop }: { scrollTop: number }) {
+const scrollDebouncedFn = useDebounceFn((scrollTop) => {
   currentScrollTop.value = scrollTop
+}, 500, { maxWait: 2000 })
+
+const scroll = ({ scrollTop }: { scrollTop: number }) => {
+  scrollDebouncedFn(scrollTop)
 }
 const scrollBar = ref()
 onActivated(() => scrollBar.value.setScrollTop(currentScrollTop.value))
 
-onMounted(() => {
-  init()
-})
-
+onMounted(() => init())
 </script>
 
 <style>
-.whole-page {
-  max-width: min(calc(100vw - 251px), 1300px);
-}
+
 </style>
 
 <route>

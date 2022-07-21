@@ -53,7 +53,7 @@
             <span font-bold text-xl inline-block m-3>
               {{ item.title }}
             </span>
-            <p v-for="(x,i) in item.txt" :key="i" indent-8 my-4 mx-0 text-base>
+            <p v-for="(x, i) in item.txt" :key="i" indent-8 my-4 mx-0 text-base>
               {{ x }}
             </p>
           </div>
@@ -150,7 +150,8 @@ async function initArtistAlbum() {
 async function loadMore() {
   params.offset += params.limit
   await getArtistHotAlbum(params).then((res) => {
-    if (res.album.length === 0) return
+    if (res.album.length === 0)
+      return
     for (const item of res.album)
       albumData.value.push(item)
     albumMore.value = res.more
@@ -208,8 +209,12 @@ function toMV(id: number) {
 
 // keep-alive记住滚动条位置
 const currentScrollTop = ref(0)
-function scroll({ scrollTop }: { scrollTop: number }) {
+const scrollDebouncedFn = useDebounceFn((scrollTop) => {
   currentScrollTop.value = scrollTop
+}, 500, { maxWait: 2000 })
+
+const scroll = ({ scrollTop }: { scrollTop: number }) => {
+  scrollDebouncedFn(scrollTop)
 }
 const scrollBar = ref()
 onActivated(() => scrollBar.value.setScrollTop(currentScrollTop.value))
@@ -226,7 +231,6 @@ watch(() => props.artistId, () => {
     loading.value = false
   })
 })
-
 </script>
 
 <style>

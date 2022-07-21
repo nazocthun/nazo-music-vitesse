@@ -1,45 +1,55 @@
 <template>
-  <div v-loading="loading" class="whole-page" mx-auto p-5 pb-0>
-    <div class="flex">
-      <div w-50 aspect-square>
-        <CoverLazy :src="songListInfo.picUrl" />
+  <el-scrollbar ref="scrollBar" @scroll="scroll">
+    <div v-loading="loading" class="whole-page" mx-auto p-5 pb-0>
+      <div class="flex">
+        <div w-50 aspect-square>
+          <CoverLazy :src="songListInfo.picUrl" />
+        </div>
+        <div px-5 py-0 flex-1>
+          <div text-2xl font-bold flex items-center>
+            <div text-orange-700 border="~ solid orange-700" inline-block text-xl mr-2 rounded px-2 py-0 cursor-default>
+              歌单
+            </div>
+            {{ songListInfo.name }}
+          </div>
+          <div items-center text-sm>
+            <div flex="~" items-center my-5>
+              <img h-6 w-6 rounded-full mr-2 border="~ solid orange-700" :src="userDetail.avatarUrl">
+              {{ userDetail.nickname }} {{ songListInfo.publishTime }}创建
+            </div>
+            <div my-5>
+              歌曲数：{{ songListInfo.trackCount }}
+            </div>
+          </div>
+          <div
+            inline-block mr-2 rounded-2xl bg-orange-700 py-1 px-4 text-white cursor-pointer
+            @click="playSongList(trackIds)"
+          >
+            播放全部
+          </div>
+        </div>
       </div>
-      <div px-5 py-0 flex-1>
-        <div text-2xl font-bold flex items-center>
-          <div text-orange-700 border="~ solid orange-700" inline-block text-xl mr-2 rounded px-2 py-0 cursor-default>
-            歌单
+      <el-tabs v-model="activeName" @tab-click="handleClick">
+        <el-tab-pane label="歌曲列表" name="music">
+          <div w-full>
+            <MusicTable
+              ref="musicTable" :data="tableData" :loading="false" :pic="true" :album="true" :more="more"
+              max-height="530px" style="height: auto;" @load-more="loadMore"
+            />
           </div>
-          {{ songListInfo.name }}
-        </div>
-        <div items-center text-sm>
-          <div flex="~" items-center my-5>
-            <img h-6 w-6 rounded-full mr-2 border="~ solid orange-700" :src="userDetail.avatarUrl">
-            {{ userDetail.nickname }} {{ songListInfo.publishTime }}创建
-          </div>
-          <div my-5>
-            歌曲数：{{ songListInfo.trackCount }}
-          </div>
-        </div>
-        <div inline-block mr-2 rounded-2xl bg-orange-700 py-1 px-4 text-white cursor-pointer
-          @click="playSongList(trackIds)">
-          播放全部
-        </div>
-      </div>
+        </el-tab-pane>
+        <el-tab-pane label="评论" name="comment" :lazy="true">
+          <CommentsView :id="songListId" :type="2" />
+        </el-tab-pane>
+        <el-tab-pane label="相似歌单" name="similarLists" :lazy="true">
+          <CoverView
+            :data="simlilarListsData" :more="false" :show-more="false" @play="playSongListById"
+            @to="toSongList"
+          />
+        </el-tab-pane>
+      </el-tabs>
     </div>
-    <el-tabs v-model="activeName" @tab-click="handleClick">
-      <el-tab-pane label="歌曲列表" name="music">
-        <div w-full>
-          <MusicTable ref="musicTable" :data="tableData" :loading="false" :pic="true" :album="true" :more="more"
-            :max-height="'530px'" style="height: auto;" @load-more="loadMore" />
-        </div>
-      </el-tab-pane>
-      <el-tab-pane label="评论" name="comment" :lazy="true" />
-      <el-tab-pane label="相似歌单" name="similarLists" :lazy="true">
-        <CoverView :data="simlilarListsData" :more="false" :show-more="false" @play="playSongListById"
-          @to="toSongList" />
-      </el-tab-pane>
-    </el-tabs>
-  </div>
+  </el-scrollbar>
 </template>
 
 <script setup lang="ts">
@@ -105,7 +115,8 @@ function handleClick(tab: any) {
 }
 
 function loadMore() {
-  if (!more.value || trackIds.value.length === 0) return
+  if (!more.value || trackIds.value.length === 0)
+    return
   getSongDetail({
     ids: getTrackIdsByOffset(offset.value),
     realIP: params.realIP,
@@ -116,7 +127,17 @@ function loadMore() {
   })
 }
 
-// 获取创建者信息
+// keep-alive记住滚动条位置
+const currentScrollTop = ref(0)
+const scrollDebouncedFn = useDebounceFn((scrollTop) => {
+  currentScrollTop.value = scrollTop
+}, 500, { maxWait: 2000 })
+
+const scroll = ({ scrollTop }: { scrollTop: number }) => {
+  scrollDebouncedFn(scrollTop)
+}
+const scrollBar = ref()
+onActivated(() => scrollBar.value.setScrollTop(currentScrollTop.value))
 
 // 获取相似歌单
 const simlilarListsData = ref<SongList[]>([] as SongList[])
