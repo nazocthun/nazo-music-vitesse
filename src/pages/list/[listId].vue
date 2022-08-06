@@ -7,7 +7,7 @@
         </div>
         <div px-5 py-0 flex-1>
           <div text-2xl font-bold flex items-center>
-            <div text-orange-700 border="~ solid orange-700" inline-block text-xl mr-2 rounded px-2 py-0 cursor-default>
+            <div text-orange-700 border="~ solid orange-700" inline-block text-xl mr-2 rounded px-2 py-0 cursor-default select-none>
               歌单
             </div>
             {{ songListInfo.name }}
@@ -15,7 +15,8 @@
           <div items-center text-sm>
             <div flex="~" items-center my-5>
               <img h-6 w-6 rounded-full mr-2 border="~ solid orange-700" :src="userDetail.avatarUrl">
-              {{ userDetail.nickname }} {{ songListInfo.publishTime }}创建
+              <span>{{ userDetail.nickname }}</span>
+              <span ml-3>{{ songListInfo.publishTime }}创建</span>
             </div>
             <div my-5>
               歌曲数：{{ songListInfo.trackCount }}
@@ -192,6 +193,7 @@ onMounted(() => {
 
 <route>
 {
+  name: "list",
   meta: {
     keepAlive: true,
   }
