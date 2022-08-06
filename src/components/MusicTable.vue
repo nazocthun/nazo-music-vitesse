@@ -12,7 +12,7 @@
       :max-height="props.maxHeight"
       @row-dblclick="rowDoubleClick"
     >
-      <el-table-column type="index" width="50" />
+      <el-table-column type="index" width="50" :index="indexWithPage" />
       <el-table-column v-if="props.pic" width="100">
         <template #default="scope">
           <div class="group" w-16 h-16 relative>
@@ -133,9 +133,27 @@ const props = defineProps({
     },
     required: false,
   },
+  page: {
+    type: Number,
+    default() {
+      return undefined
+    },
+    required: false,
+  },
+  pageSize: {
+    type: Number,
+    default() {
+      return undefined
+    },
+    required: false,
+  },
 })
 const em = defineEmits(['loadMore'])
 const tableData = ref<Music[]>([] as Music[])
+
+function indexWithPage(index: number) {
+  return ((props.page && props.pageSize) ? index + (props.page - 1) * props.pageSize : index) + 1
+}
 
 watch(props, () => {
   tableData.value = props.data
