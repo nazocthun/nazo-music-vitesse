@@ -25,7 +25,7 @@
           </div>
           <div
             inline-block mr-2 rounded-2xl bg-orange-700 py-1 px-4 text-white cursor-pointer
-            @click="playAlbum(0,tableData)"
+            @click="playAlbum(0, tableData)"
           >
             播放全部
           </div>
@@ -52,7 +52,7 @@
 </template>
 
 <script setup lang="ts">
-import { getAlbumInfo } from '@/api/getAlbumInfo'
+import { getAlbumInfo } from '@/api/albumAPI/getAlbumInfo'
 import useAlbum from '@/hooks/useAlbum'
 
 const props = defineProps<{ albumId: string }>()
@@ -71,7 +71,7 @@ const albumInfo = ref<Partial<Album>>({})
 const artistName = ref<string>('')
 const tableData = ref<Array<Music>>()
 
-function init() {
+async function init() {
   getAlbumInfo(params).then((res) => {
     albumInfo.value = res
     tableData.value = res.music
@@ -100,9 +100,10 @@ onActivated(() => scrollBar.value.setScrollTop(currentScrollTop.value))
 watch(() => props.albumId, () => {
   albumId.value = props.albumId
   params.id = albumId.value
-  getAlbumInfo(params).then(() => {
-    activeName.value = 'first'
+  loading.value = true
+  init().then(() => {
     loading.value = false
+    activeName.value = 'music'
   })
 })
 
@@ -118,3 +119,12 @@ onMounted(() => {
   max-width: min(calc(100vw - 251px), 1300px);
 }
 </style>
+
+<route>
+{
+  name: "album",
+  meta: {
+    keepAlive: true,
+  }
+}
+</route>
