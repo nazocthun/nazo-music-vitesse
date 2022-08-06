@@ -10,7 +10,7 @@
         </div>
         <div flex items-center mt-6>
           <div h-16 w-16>
-            <img rounded-full w-full h-full :src="avatarUrl" alt="">
+            <CoverLazy w-full h-full :src="avatarUrl" shape="circle" />
           </div>
           <div ml-6 text-lg font-semibold cursor-default>
             {{ artistName }}
@@ -41,7 +41,7 @@
 
 <script setup lang="ts">
 import { storeToRefs } from 'pinia'
-import { getMVDetail, getMVUrl } from '@/api/getMVDetail'
+import { getMVDetail, getMVUrl } from '@/api/mvAPI/getMVDetail'
 import { usePlayStore } from '@/store/PlayStore'
 
 const props = defineProps<{ mvId: string }>()

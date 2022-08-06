@@ -83,7 +83,7 @@ import {
   getArtistIntroduction,
   getArtistMV,
   getSimilarArtistInfo,
-} from '@/api/getArtistInfo'
+} from '@/api/artistAPI/getArtistInfo'
 import useAlbum from '@/hooks/useAlbum'
 
 const props = defineProps<{ artistId: string }>()

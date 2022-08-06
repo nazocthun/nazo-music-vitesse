@@ -9,7 +9,7 @@
 </template>
 
 <script setup lang="ts">
-import { getBanner } from '@/api/getBanner'
+import { getBanner } from '@/api/indexAPI/getBanner'
 import { getSongDetail } from '@/api/getSongDetail'
 import usePlay from '@/hooks/usePlay'
 

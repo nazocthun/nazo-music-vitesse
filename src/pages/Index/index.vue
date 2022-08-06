@@ -17,7 +17,7 @@
 </template>
 
 <script setup lang="ts">
-import { getPersonalizedSongList } from '@/api/getPersonalized'
+import { getPersonalizedSongList } from '@/api/indexAPI/getPersonalized'
 import useSongList from '@/hooks/useSongList'
 
 const router = useRouter()

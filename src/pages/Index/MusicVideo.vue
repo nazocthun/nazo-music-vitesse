@@ -34,7 +34,7 @@
 </template>
 
 <script setup lang="ts">
-import { getAllMVs } from '@/api/getAllMVs'
+import { getAllMVs } from '@/api/mvAPI/getAllMVs'
 
 const selectedArea = ref('全部')
 const selectedType = ref('全部')
