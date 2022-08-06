@@ -1,4 +1,4 @@
-import { getAlbumInfo } from '@/api/getAlbumInfo'
+import { getAlbumInfo } from '@/api/albumAPI/getAlbumInfo'
 import { useMusicQueueStore } from '@/store/MusicQueueStore'
 import usePlay from '@/hooks/usePlay'
 
