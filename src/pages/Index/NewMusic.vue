@@ -1,7 +1,7 @@
 <template>
   <el-scrollbar ref="scrollBar" style="height:100%" @scroll="scroll">
     <div class="whole-page" mx-auto p-5>
-      <div w-full>
+      <div class="tab-chooser" absolute z-100 bg-white h-16 translate-y--5 w-full right-auto>
         <el-tabs v-model="activeName" @tab-click="handleClick">
           <el-tab-pane label="全部" name="0" />
           <el-tab-pane label="华语" name="7" />
@@ -9,15 +9,9 @@
           <el-tab-pane label="日语" name="8" />
           <el-tab-pane label="韩语" name="16" />
         </el-tabs>
-        <MusicTable
-          :data="tableData"
-          :loading="loading"
-          :pic="true"
-          :album="true"
-          height="100%"
-          :show-more="false"
-        />
       </div>
+      <div relative top-16 />
+      <MusicTable :data="tableData" :loading="loading" :pic="true" :album="true" height="100%" :show-more="false" />
     </div>
   </el-scrollbar>
 </template>
@@ -33,9 +27,15 @@ const params = reactive({
 
 const tableData = ref<Array<Music>>()
 const loading = ref(true)
+const scrollBar = ref()
+
+function scrollToTop() {
+  scrollBar.value.setScrollTop(0)
+}
 
 function handleClick(tab: any) {
   init()
+  scrollToTop()
 }
 
 function init() {
@@ -57,14 +57,17 @@ const scrollDebouncedFn = useDebounceFn((scrollTop) => {
 const scroll = ({ scrollTop }: { scrollTop: number }) => {
   scrollDebouncedFn(scrollTop)
 }
-const scrollBar = ref()
+
 onActivated(() => scrollBar.value.setScrollTop(currentScrollTop.value))
 
 onMounted(() => init())
 </script>
 
 <style>
-
+.tab-chooser {
+  max-width: min(calc(100vw - 251px), 1300px);
+  min-width: 1104px;
+}
 </style>
 
 <route>

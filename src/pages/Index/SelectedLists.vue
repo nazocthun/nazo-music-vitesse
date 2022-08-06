@@ -1,18 +1,18 @@
 <template>
   <el-scrollbar ref="scrollBar" style="height:100%" @scroll="scroll">
     <div class="whole-page" my-0 mx-auto p-5>
-      <el-tabs v-model="activeName" w-full @tab-click="handleClick">
-        <el-tab-pane label="全部" name="全部" />
-        <el-tab-pane v-for="(tag, index) in tags" :key="index" :label="tag.toString()" :name="tag.toString()" />
-      </el-tabs>
-      <CoverView
-        :data="songListsData"
-        :more="more"
-        :show-more="true"
-        @load-more="loadMore"
-        @play="playSongListById"
-        @to="toSongList"
-      />
+      <div class="tab-chooser" absolute z-100 bg-white h-16 translate-y--5 w-full right-auto>
+        <el-tabs v-model="activeName" w-full @tab-click="handleClick">
+          <el-tab-pane label="全部" name="全部" />
+          <el-tab-pane v-for="(tag, index) in tags" :key="index" :label="tag.toString()" :name="tag.toString()" />
+        </el-tabs>
+      </div>
+      <div relative top-16>
+        <CoverView
+          :data="songListsData" :more="more" :show-more="true" @load-more="loadMore" @play="playSongListById"
+          @to="toSongList"
+        />
+      </div>
     </div>
   </el-scrollbar>
 </template>
@@ -27,7 +27,7 @@ const activeName = ref('全部')
 const more = ref(true)
 const tags = ref([] as String[])
 const songListsData = ref<SongList[]>([] as SongList[])
-
+const scrollBar = ref()
 const { playSongListById } = useSongList()
 
 function toSongList(id: number) {
@@ -39,6 +39,10 @@ const params = reactive({
   before: 0,
   realIP: '116.25.146.177',
 })
+
+function scrollToTop() {
+  scrollBar.value.setScrollTop(0)
+}
 
 // 获取标签
 function initTags() {
@@ -65,6 +69,7 @@ function init() {
 
 function handleClick() {
   init()
+  scrollToTop()
 }
 
 // 滚动加载
@@ -88,12 +93,15 @@ const scrollDebouncedFn = useDebounceFn((scrollTop) => {
 const scroll = ({ scrollTop }: { scrollTop: number }) => {
   scrollDebouncedFn(scrollTop)
 }
-const scrollBar = ref()
+
 onActivated(() => scrollBar.value.setScrollTop(currentScrollTop.value))
 </script>
 
 <style>
-
+.tab-chooser {
+  max-width: min(calc(100vw - 251px), 1300px);
+  min-width: 1104px;
+}
 </style>
 
 <route>
