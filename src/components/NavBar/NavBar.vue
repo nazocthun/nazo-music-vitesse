@@ -1,6 +1,7 @@
 <template>
   <div flex h-16>
-    <div text-2xl text-orange-700 h-full w="200px" flex items-center justify-center font-bold cursor-default>
+    <div text-2xl text-orange-700 h-full w="200px" flex items-center justify-center font-bold cursor-default
+      select-none>
       Nazo Music
     </div>
     <div flex h-8 mr-auto ml-8>
@@ -11,8 +12,10 @@
         <div h-full w-full bg="black/70" i-ic-sharp-keyboard-arrow-right />
       </div>
     </div>
-    <div class="serachbar" mr-8>
-      <SearchBox />
+    <div class="search-bar" mr-8 w-50>
+      <keep-alive>
+        <SearchBox />
+      </keep-alive>
     </div>
   </div>
 </template>
@@ -24,9 +27,8 @@ const router = useRouter()
 function go(destnation: number) {
   router.go(destnation)
 }
-
 </script>
 
 <style>
-  
+
 </style>
