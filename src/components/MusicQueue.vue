@@ -17,7 +17,7 @@
                 v-for="music in musicQueue"
                 :key="music.id"
                 class="queue-item"
-                :class="{'active-item':music.id==currentMusicInfo.id}"
+                :class="{ 'active-item': music.id === currentMusicInfo.id }"
                 @dblclick="queueDoubleClick(music)"
               >
                 <span flex w="92%">
@@ -26,7 +26,7 @@
                     <div bg-orange-700 w-1 mx-px h-full class="playingIcon2" />
                     <div bg-orange-700 w-1 mx-px h-full class="playingIcon3" />
                   </div>
-                  <span :class="{'':isPlaying && music.id===currentMusicInfo.id}" />
+                  <span :class="{ '': isPlaying && music.id === currentMusicInfo.id }" />
                   <span
                     w="35%" ml-6 px-1 overflow-hidden text-ellipsis whitespace-nowrap
                     :title="music.name"
@@ -38,7 +38,7 @@
                     hover="underline underline-offset-2"
                     :title="artistsTitleString(music.artists)"
                   >
-                    <span v-for="(artist , i) in music.artists" :key="i">
+                    <span v-for="(artist, i) in music.artists" :key="i">
                       <span
                         hover="underline underline-offset-2"
                         @click.stop="toArtist(artist.id)"
@@ -46,7 +46,7 @@
                         {{ artist.name }}
                       </span>
                       <span
-                        v-if="music.artists.length != 1 && i != music.artists.length - 1"
+                        v-if="music.artists.length !== 1 && i !== music.artists.length - 1"
                         text-gray-600 cursor-default
                       >
                         &nbsp;&amp;&nbsp;
@@ -110,7 +110,7 @@
                     hover="underline underline-offset-2"
                     :title="artistsTitleString(music.artists)"
                   >
-                    <span v-for="(artist , i) in music.artists" :key="i">
+                    <span v-for="(artist, i) in music.artists" :key="i">
                       <span
                         hover="underline underline-offset-2"
                         @click.stop="toArtist(artist.id)"
@@ -118,7 +118,7 @@
                         {{ artist.name }}
                       </span>
                       <span
-                        v-if="music.artists.length != 1 && i != music.artists.length - 1"
+                        v-if="music.artists.length !== 1 && i !== music.artists.length - 1"
                         text-gray-600 cursor-default
                       >
                         &nbsp;&amp;&nbsp;
@@ -309,7 +309,6 @@ function toArtist(id: number) {
 </script>
 
 <style lang="scss">
-
 .el-tabs__header {
   margin: 0.75rem;
 }
@@ -391,5 +390,4 @@ function toArtist(id: number) {
   color: rgb(194, 65, 12);
   position: relative;
 }
-
 </style>

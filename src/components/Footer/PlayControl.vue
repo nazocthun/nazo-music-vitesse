@@ -36,7 +36,7 @@
             v-model="audioTime"
             :max="duration"
             :show-tooltip="false"
-            :disabled="duration===0"
+            :disabled="duration === 0"
             @input="updateDragingTime"
             @change="updateTime"
           />
@@ -49,17 +49,17 @@
       <div flex items-center>
         <div cursor-pointer w-5 h-5 mr-6>
           <div
-            v-if="playMode ==='sequence'"
+            v-if="playMode === 'sequence'"
             w-full h-full i-mdi-shuffle-disabled
             @click="toggleMode"
           />
           <div
-            v-if="playMode ==='shuffle'"
+            v-if="playMode === 'shuffle'"
             w-full h-full i-mdi-shuffle
             @click="toggleMode"
           />
           <div
-            v-if="playMode ==='loop'"
+            v-if="playMode === 'loop'"
             w-full h-full i-mdi-repeat-once
             @click="toggleMode"
           />
@@ -236,7 +236,8 @@ watch(isMusicChanged, () => {
 const isDraging = ref(false)
 
 watch(currentTime, () => {
-  if (isDraging.value) return
+  if (isDraging.value)
+    return
   audioTime.value = currentTime.value
 })
 

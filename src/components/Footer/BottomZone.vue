@@ -7,8 +7,8 @@
         <div
           ref="queueButton"
           :class="{
-            'queue-delete-before':musicQueueStyle=='delete',
-            'queue-add-before':musicQueueStyle=='add',
+            'queue-delete-before': musicQueueStyle === 'delete',
+            'queue-add-before': musicQueueStyle === 'add',
           }"
           mr-24 cursor-pointer flex relative justify-start items-center float-left
           @click="toggleQueue()"
@@ -52,7 +52,6 @@ function spaceDown() {
 function stop() {
   playControl.value.stop()
 }
-
 </script>
 
 <style>
