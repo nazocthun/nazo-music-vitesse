@@ -1,5 +1,5 @@
 import type { AxiosResponse } from 'axios'
-import { getRequest } from './request'
+import { getRequest } from '../request'
 import { getCompressedImgUrl, playCountMinimize } from '@/utils/common'
 
 const REQUEST_URL = {

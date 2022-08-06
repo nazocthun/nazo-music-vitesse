@@ -1,5 +1,5 @@
 import type { AxiosResponse } from 'axios'
-import { getRequest } from './request'
+import { getRequest } from '../request'
 import { durationTimeFormat, formatDate, getCompressedImgUrl, playCountMinimize } from '@/utils/common'
 
 const REQUEST_URL = {
@@ -11,7 +11,7 @@ const REQUEST_URL = {
 }
 
 // 获取歌手简单信息、热门单曲
-export const convertArtistInfo = async(res: AxiosResponse<any>): Promise<ArtistInfo> => {
+export const convertArtistInfo = async (res: AxiosResponse<any>): Promise<ArtistInfo> => {
   const artistInfo = res.data.artist
   const hotMusic = res.data.hotSongs
   return {
@@ -51,7 +51,7 @@ export const getArtistInfo = (params = {}) => {
 }
 
 // 获取歌手热门专辑
-export const convertArtistHotAlbum = async(res: AxiosResponse<any>): Promise<AlbumWrapper> => {
+export const convertArtistHotAlbum = async (res: AxiosResponse<any>): Promise<AlbumWrapper> => {
   const hotAlbum = res.data.hotAlbums
   return {
     album: hotAlbum.map((item: { id: any; name: any; size: any; picUrl: string; artist: { id: any; name: any }; publishTime: Date }) => {
@@ -76,7 +76,7 @@ export const getArtistHotAlbum = (params = {}) => {
 }
 
 // 获取相似歌手信息
-export const convertSimilarArtistInfo = async(res: AxiosResponse<any>): Promise<Array<ArtistSimple>> => {
+export const convertSimilarArtistInfo = async (res: AxiosResponse<any>): Promise<Array<ArtistSimple>> => {
   const similarArtist = res.data.artists
   return similarArtist.map((item: { id: any; name: any; img1v1Url: string }) => {
     return {
@@ -92,7 +92,7 @@ export const getSimilarArtistInfo = (params = {}) => {
 }
 
 // 获取歌手介绍
-export const convertArtistIntroduction = async(res: AxiosResponse<any>): Promise<ArtistIntroduction> => {
+export const convertArtistIntroduction = async (res: AxiosResponse<any>): Promise<ArtistIntroduction> => {
   return {
     briefDesc: res.data.briefDesc,
     introduction: res.data.introduction.map((item: { ti: any; txt: string }) => {
@@ -109,7 +109,7 @@ export const getArtistIntroduction = (params = {}) => {
 }
 
 // 获取歌手MV
-export const convertArtistMV = async(res: AxiosResponse<any>): Promise<Array<MV>> => {
+export const convertArtistMV = async (res: AxiosResponse<any>): Promise<Array<MV>> => {
   const mvs = res.data.mvs
 
   return mvs.map((item: { name: any; id: any; imgurl16v9: string; picUrl: string; artist: { id: any; name: any }; playCount: any; publishTime: any; duration: number }) => {

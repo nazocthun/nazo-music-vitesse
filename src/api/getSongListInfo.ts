@@ -11,7 +11,7 @@ const REQUEST_URL = {
   related: '/related/playlist',
 }
 // 获取相似歌单
-export const convertSimilarSongList = async(res: AxiosResponse<any>): Promise<SongList[]> => {
+export const convertSimilarSongList = async (res: AxiosResponse<any>): Promise<SongList[]> => {
   const songLists = res.data.playlists
   return songLists.map((item: { id: any; name: any; coverImgUrl: string; creator: { userId: any } }) => {
     return {
@@ -28,12 +28,12 @@ export const convertSimilarSongList = async(res: AxiosResponse<any>): Promise<So
  * @param params.id 歌单id
  * @returns SongList[] 相似歌单列表
  */
-export const getSimilarSongList = async(params = {}) => {
+export const getSimilarSongList = async (params = {}) => {
   return getRequest(REQUEST_URL.related, params).then(convertSimilarSongList)
 }
 
 // 获取精选歌单标签
-export const convertSelectedTags = async(res: AxiosResponse<any>): Promise<String[]> => {
+export const convertSelectedTags = async (res: AxiosResponse<any>): Promise<String[]> => {
   const tags = res.data.tags
   return tags.map((item: { name: string }) => {
     return item.name
@@ -49,7 +49,7 @@ export const getSelectedTags = (params = {}) => {
 }
 
 // 获取精选歌单
-export const convertSelectedSongList = async(res: AxiosResponse<any>): Promise<SongListWrapper> => {
+export const convertSelectedSongList = async (res: AxiosResponse<any>): Promise<SongListWrapper> => {
   const songListInfo = res.data.playlists
   return {
     songList: songListInfo.map((item: { name: any; id: any; coverImgUrl: string; trackCount: any; createTime: Date; updateTime: Date }) => {
@@ -80,7 +80,7 @@ export const getSelectedSongList = (params = {}) => {
 }
 
 // 获取自定义歌单
-export const convertSelfMadeSongList = async(res: AxiosResponse<any>): Promise<SongListWrapper> => {
+export const convertSelfMadeSongList = async (res: AxiosResponse<any>): Promise<SongListWrapper> => {
   const songListInfo = res.data.playlists
   return {
     songList: songListInfo.map((item: { name: any; id: any; coverImgUrl: string; trackCount: any; createTime: Date; updateTime: Date }) => {
@@ -103,7 +103,7 @@ export const getSelfMadeSongList = (params = {}) => {
 }
 
 // 用 tracksID 获取歌单歌曲
-export const convertSongListDetail = async(res: AxiosResponse<any>): Promise<SongList> => {
+export const convertSongListDetail = async (res: AxiosResponse<any>): Promise<SongList> => {
   const songListInfo = res.data.playlist
   return {
     id: songListInfo.id,

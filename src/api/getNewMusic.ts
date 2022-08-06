@@ -6,7 +6,8 @@ const REQUEST_URL = '/top/song'
 
 export const convertNewMusic = (res: AxiosResponse<any>): Music[] => {
   const data = res.data.data.slice(0, 50)
-  if (!data || !data.length) return []
+  if (!data || !data.length)
+    return []
   return data.map((item: any) => {
     const { album, artists, duration, alias } = item
     return {

@@ -1,5 +1,5 @@
 import type { AxiosResponse } from 'axios'
-import { getRequest } from './request'
+import { getRequest } from '../request'
 import { getCompressedImgUrl, playCountMinimize } from '@/utils/common'
 
 const REQUEST_URL = {
@@ -31,11 +31,12 @@ export const convertMVDetail = async (res: AxiosResponse<any>): Promise<MV> => {
     artist: {
       id: mv.artistId,
       name: mv.artistName,
-      picUrl: mv.artists.map((item: { id: any; img1v1Url: any }) => {
-        if (item.id === mv.artistId) return getCompressedImgUrl(item.img1v1Url, 500)
+      picUrl: mv.artists.map((item: { id: any; img1v1Url: any }) => { // TODO:
+        if (item.id === mv.artistId)
+          return getCompressedImgUrl(item.img1v1Url, 500)
       }).shift(),
     },
-    playCount:  playCountMinimize(mv.playCount),
+    playCount: playCountMinimize(mv.playCount),
     maxr: Math.max(...mv.brs.map((item: { br: any }) => item.br)),
     publishTime: mv.publishTime,
     desc: mv.desc,

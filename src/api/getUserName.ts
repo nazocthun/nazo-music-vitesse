@@ -5,7 +5,7 @@ const REQUEST_URL = {
   detail: '/user/detail',
 }
 
-export const convertUserDetail = async(res: AxiosResponse<any>): Promise<User> => {
+export const convertUserDetail = async (res: AxiosResponse<any>): Promise<User> => {
   const profile = res.data.profile
   return {
     userId: profile.userId,

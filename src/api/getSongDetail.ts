@@ -6,7 +6,7 @@ const REQUEST_URL = {
   detail: 'song/detail',
 }
 
-export const convertSongDetail = async(res: AxiosResponse<any>): Promise<Music[]> => {
+export const convertSongDetail = async (res: AxiosResponse<any>): Promise<Music[]> => {
   const musicInfo = res.data.songs
   return musicInfo.map((item: { id: any; name: any; al: { picUrl: string; id: any; name: any }; ar: { id: any; name: any; alias: any }[]; dt: number }) => {
     return {

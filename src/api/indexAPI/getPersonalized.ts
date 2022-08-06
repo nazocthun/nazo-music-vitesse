@@ -1,5 +1,5 @@
 import type { AxiosResponse } from 'axios'
-import { getRequest } from './request'
+import { getRequest } from '../request'
 import { formatDate, getCompressedImgUrl } from '@/utils/common'
 
 const REQUEST_URL = {
@@ -22,6 +22,6 @@ export const convertPersonalizedSongList = (res: AxiosResponse<any>): Promise<So
   })
 }
 
-export const getPersonalizedSongList = async(params = {}) => {
+export const getPersonalizedSongList = async (params = {}) => {
   return getRequest(REQUEST_URL.songlist, params).then(convertPersonalizedSongList)
 }

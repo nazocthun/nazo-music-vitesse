@@ -1,11 +1,11 @@
 import type { AxiosResponse } from 'axios'
-import { getRequest } from './request'
+import { getRequest } from '../request'
 
 const REQUEST_URL = {
   detail: '/banner',
 }
 
-export const convertBanner = async(res: AxiosResponse<any>): Promise<Banner[]> => {
+export const convertBanner = async (res: AxiosResponse<any>): Promise<Banner[]> => {
   const banners = res.data.banners
   return banners.map((item: { imageUrl: any; targetType: any; targetId: any }) => {
     return {

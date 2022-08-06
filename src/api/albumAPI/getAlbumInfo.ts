@@ -1,5 +1,5 @@
 import type { AxiosResponse } from 'axios'
-import { getRequest } from './request'
+import { getRequest } from '../request'
 import { durationTimeFormat, formatDate, getCompressedImgUrl } from '@/utils/common'
 
 const REQUEST_URL = {
@@ -8,7 +8,7 @@ const REQUEST_URL = {
   count: '/album/detail/dynamic',
 }
 
-export const convertAlbumInfo = async(res: AxiosResponse<any>): Promise<Album> => {
+export const convertAlbumInfo = async (res: AxiosResponse<any>): Promise<Album> => {
   const albumInfo = res.data.album
   const musicInfo = res.data.songs
   return {
