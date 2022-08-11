@@ -18,9 +18,11 @@
         </div>
       </el-tooltip>
     </div>
-    <transition name="fade">
-      <MusicQueue v-show="showQueue" ref="queue" @clear="stop" />
-    </transition>
+    <Teleport to="body">
+      <transition name="fade">
+        <MusicQueue v-show="showQueue" ref="queue" @clear="stop" />
+      </transition>
+    </Teleport>
   </div>
 </template>
 
@@ -98,12 +100,12 @@ function stop() {
 }
 
 .queue-add-before {
-  @apply before:content-['+1'];
+  @apply before:content-[+1];
   @apply before:absolute before:-top-2 before:-left-5 before:font-bold before:scale-75;
   @apply before:animate-[addAnimation_0.5s_reverse];
 }
 .queue-delete-before {
-  @apply before:content-['-1'];
+  @apply before:content-[-1];
   @apply before:absolute before:-top-2 before:-left-5 before:font-bold before:scale-75;
   @apply before:animate-[deleteAnimation_0.5s_reverse];
 }
