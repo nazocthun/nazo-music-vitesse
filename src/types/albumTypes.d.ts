@@ -20,5 +20,6 @@ declare interface Album { // 专辑
 declare interface AlbumSimple {
   id: number
   name: string
-  artist?: ArtistSimple
+  artist: ArtistSimple
+  picUrl?: string
 }

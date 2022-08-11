@@ -16,10 +16,10 @@ declare interface SearchSuggest {
 
 declare interface MusicSearchResult {
   songCount: number
-  songs: Music[]
+  songs?: Music[]
 }
 
 declare interface AlbumSearchResult {
   albumCount: number
-  albums: Album[]
+  albums?: AlbumSimple[]
 }
