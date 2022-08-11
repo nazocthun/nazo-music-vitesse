@@ -5,9 +5,11 @@
   >
     <div
       class="img-wrap"
-      w-12 h-12 mr-3 cursor-pointer relative
+      flex justify-center items-center
+      w-12 h-12 cursor-pointer
       title="打开音乐详情页"
       onselectstart="return false"
+      rounded-xl
       @click="toSongDetail()"
     >
       <img
@@ -22,7 +24,7 @@
         <div w-10 h-10 i-ic-sharp-music-note />
       </div>
     </div>
-    <div v-show="currentMusicInfo" class="music-info" w-full flex="~ col" justify-center items-center>
+    <div v-show="currentMusicInfo" class="music-info" w-full flex="~ col" justify-center items-center ml-3>
       <div
         v-show="currentMusicUrl"
         text-sm w-full block overflow-x-hidden text-ellipsis whitespace-nowrap
@@ -34,9 +36,9 @@
         v-show="currentMusicUrl"
         mt-2 text-xs w-full inline-block overflow-x-hidden text-ellipsis whitespace-nowrap
       >
-        <div v-for="(artist, i) in currentMusicInfo.artists" :key="i+99" inline-block cursor-default>
+        <div v-for="(artist, i) in currentMusicInfo.artists" :key="i + 99" inline-block cursor-default>
           <span>{{ artist.name }}</span>
-          <span v-show="currentMusicInfo.artists.length != 1 && i != currentMusicInfo.artists.length - 1">
+          <span v-show="currentMusicInfo.artists.length !== 1 && i !== currentMusicInfo.artists.length - 1">
             &amp;&nbsp;
           </span>
         </div>
@@ -60,5 +62,4 @@ const { currentMusicUrl, currentMusicInfo } = storeToRefs(MUSIC_INFO_STORE)
 function toSongDetail() { // TODO:
 
 }
-
 </script>
