@@ -2,110 +2,84 @@
   <el-scrollbar ref="scrollBar" style="height:100%" @scroll="scroll">
     <div class="whole-page" mx-auto p-5 pb-0>
       <div class="tab-chooser" absolute z-100 bg-white h-30 translate-y--5 w-full right-auto>
-        <div id="search-label" h-8 ml-5 pt-5>
+        <div id="search-label" h-8 ml-3 pt-5>
           <span font-500 text-2xl>{{ searchWords }}</span>
-          <span text-sm text-gray-500> 共找到{{ songCount }}个结果</span>
+          <span text-sm text-gray-500> 共找到{{ searchCount }}个结果</span>
         </div>
         <el-tabs v-model="activeName" @tab-click="handleClick">
-          <el-tab-pane label="单曲" name="1" />
-          <el-tab-pane label="歌手" name="10" />
-          <el-tab-pane label="专辑" name="100" />
+          <el-tab-pane label="单曲" name="music" />
+          <el-tab-pane label="专辑" name="album" />
+          <el-tab-pane label="歌手" name="artist" />
         </el-tabs>
       </div>
-      <div v-if="activeName === '1'" relative top-24>
-        <MusicTable
-          :data=" musicData" :loading="loading" :pic="false" :album="true" :more="false" :show-more="false"
-          :page="page" :page-size="pageSize"
+      <KeepAlive>
+        <component
+          :is="searchPane" :ref="activeName" relative top-24 :search-words="searchWords"
+          @scroll-top="scrollToTop"
         />
-        <div items-center justify-center flex py-5>
-          <el-pagination
-            background hide-on-single-page layout="prev, pager, next" :total="songCount"
-            :page-size="pageSize" @current-change="songResultPagination"
-          />
-        </div>
-      </div>
+      </KeepAlive>
     </div>
   </el-scrollbar>
 </template>
 
 <script setup lang="ts">
-import { getSearchResult } from '@/api/searchAPI/search'
+import SearchMusic from '@/components/Search/SearchMusic.vue'
+import SearchAlbum from '@/components/Search/SearchAlbum.vue'
 
-const props = defineProps<{ searchWords: string }>()
+const props = defineProps({
+  searchWords: {
+    default: () => {
+      return ''
+    },
+    required: true,
+  },
+})
 const searchWords = ref<string>('')
-const loading = ref<boolean>(true)
+
+const activeName = ref('music')
+const searchPane = ref<any>(markRaw(SearchMusic))
+const music = ref()
+const album = ref()
+const artist = ref()
+
+const searchCount = computed(() => {
+  if (music.value)
+    return music.value.songCount
+  else if (album.value)
+    return album.value.albumCount
+  else if (artist.value)
+    return artist.value.artistCount
+  else
+    return 0
+})
 
 const scrollBar = ref()
-
 function scrollToTop() {
   scrollBar.value.setScrollTop(0)
 }
 
-const type = ref<number>(1)
-const musicData = ref<Music[]>([])
-const songCount = ref<number>(0)
-const page = ref<number>(1)
-const pageSize = 50
-const offset = ref<number>(0)
-
-const activeName = ref('1')
-
 function handleClick() {
   console.log(activeName.value)
   switch (activeName.value) {
-    case '1':
-      type.value = 1
-      initSongResult()
+    case 'music':
+      searchPane.value = markRaw(SearchMusic)
       break
-    case '10':
-      type.value = 10
+    case 'album':
+      searchPane.value = markRaw(SearchAlbum)
       break
-    case '100':
-      type.value = 100
+    case 'artist':
       break
   }
 }
 
-async function songResultPagination(val: number) {
-  loading.value = true
-  page.value = val
-  await getSearchResult({
-    keywords: searchWords.value,
-    type: type.value,
-    limit: pageSize,
-    offset: pageSize * (val - 1),
-  }).then((res) => {
-    musicData.value = (res as MusicSearchResult).songs
-    loading.value = false
-  }).then(() => {
-    scrollToTop()
-  })
-}
-
-async function initSongResult() {
-  loading.value = true
-  offset.value = 0
-  await getSearchResult({
-    keywords: searchWords.value,
-    type: type.value,
-    limit: pageSize,
-    offset: 0,
-  }).then((res) => {
-    songCount.value = (res as MusicSearchResult).songCount
-    musicData.value = (res as MusicSearchResult).songs
-    loading.value = false
-  })
-}
-
 onMounted(() => {
   searchWords.value = props.searchWords
-  initSongResult()
 })
 
 watch(() => props.searchWords, () => {
   searchWords.value = props.searchWords
-  activeName.value = '1'
-  initSongResult()
+  activeName.value = 'music'
+  searchPane.value = markRaw(SearchMusic)
 })
 
 // keep-alive记住滚动条位置
