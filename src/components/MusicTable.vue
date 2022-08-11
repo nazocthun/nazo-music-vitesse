@@ -155,7 +155,11 @@ function indexWithPage(index: number) {
   return ((props.page && props.pageSize) ? index + (props.page - 1) * props.pageSize : index) + 1
 }
 
-watch(props, () => {
+watch(() => props.data, () => {
+  tableData.value = props.data
+})
+
+onMounted(() => {
   tableData.value = props.data
 })
 // 播放音乐Hook
