@@ -35,7 +35,6 @@
                   </span>
                   <span
                     w="43.3%" cursor-pointer overflow-hidden text-ellipsis whitespace-nowrap text-sky-600
-                    hover="underline underline-offset-2"
                     :title="artistsTitleString(music.artists)"
                   >
                     <span v-for="(artist, i) in music.artists" :key="i">
@@ -107,7 +106,6 @@
                   </span>
                   <span
                     w="43.3%" cursor-pointer overflow-hidden text-ellipsis whitespace-nowrap text-sky-600
-                    hover="underline underline-offset-2"
                     :title="artistsTitleString(music.artists)"
                   >
                     <span v-for="(artist, i) in music.artists" :key="i">
@@ -299,7 +297,7 @@ watch(deleteToNext, () => {
 
 watch(nowIndex, () => {
   // if (isPlaying.value)
-    getMusicInfo(musicQueue.value[nowIndex.value], 'queue')
+  getMusicInfo(musicQueue.value[nowIndex.value], 'queue')
 })
 
 const router = useRouter()

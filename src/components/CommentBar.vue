@@ -34,7 +34,6 @@
 </template>
 
 <script setup lang="ts">
-
 const props = defineProps({
   comment: {
     default() {
@@ -43,5 +42,4 @@ const props = defineProps({
     required: true,
   },
 })
-
 </script>
