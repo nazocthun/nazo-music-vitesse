@@ -12,13 +12,16 @@
   "dependencies": {
     "@iconify-json/mdi": "^1.1.9",
     "@types/lodash-es": "^4.17.6",
+    "@vueuse/components": "^9.1.0",
     "@vueuse/core": "^8.9.4",
+    "@vueuse/integrations": "^9.1.0",
     "axios": "^0.26.1",
     "element-plus": "^2.1.10",
     "eslint-plugin-n": "15.1.0",
     "lodash": "^4.17.21",
     "pinia": "^2.0.13",
     "sass": "^1.50.1",
+    "universal-cookie": "^4.0.4",
     "vue": "^3.2.33",
     "vue-router": "^4.0.14"
   },

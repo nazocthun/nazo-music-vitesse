@@ -73,4 +73,6 @@
   "files.autoSave": "afterDelay",
   "editor.fontFamily": "Fira Code",
   "editor.tabSize": 2,
+  "workbench.editor.limit.enabled": true,
+  "workbench.editor.limit.perEditorGroup": true,
 }
