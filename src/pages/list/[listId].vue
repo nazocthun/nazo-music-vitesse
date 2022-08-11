@@ -68,7 +68,6 @@ const songListId = ref()
 // API参数
 const params = {
   id: 0,
-  realIP: '116.25.146.177',
 }
 
 // 通过API获得歌单及歌曲数据
@@ -90,7 +89,6 @@ async function init() {
   })
   await getSongDetail({
     ids: getTrackIdsByOffset(offset.value),
-    realIP: params.realIP,
   }).then((res) => {
     offset.value += 20
     if (res.length < 20)
@@ -120,7 +118,6 @@ function loadMore() {
     return
   getSongDetail({
     ids: getTrackIdsByOffset(offset.value),
-    realIP: params.realIP,
   }).then((res) => {
     offset.value += 20
     more.value = offset.value < trackIds.value.length

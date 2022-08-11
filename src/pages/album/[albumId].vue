@@ -62,7 +62,6 @@ const albumId = ref()
 // API参数
 const params = {
   id: 0,
-  realIP: '116.25.146.177',
 }
 
 // 通过API获得Album数据

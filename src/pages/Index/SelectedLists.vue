@@ -37,7 +37,6 @@ const params = reactive({
   cat: '全部',
   limit: 20,
   before: 0,
-  realIP: '116.25.146.177',
 })
 
 function scrollToTop() {

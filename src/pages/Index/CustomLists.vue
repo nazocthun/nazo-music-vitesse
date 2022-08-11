@@ -30,13 +30,12 @@ function toSongList(id: number) {
 const params = reactive({
   limit: 20,
   offset: 0,
-  realIP: '116.25.146.177',
 })
-
 
 async function loadMore() {
   await getSelfMadeSongList(params).then((res) => {
-    if (res.songList.length === 0) return
+    if (res.songList.length === 0)
+      return
     for (const item of res.songList)
       songListsData.value.push(item)
     params.offset += 20

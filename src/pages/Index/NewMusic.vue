@@ -22,7 +22,6 @@ import { getNewMusic } from '@/api/getNewMusic'
 const activeName = ref('0')
 const params = reactive({
   type: 0,
-  realIP: '116.25.146.177',
 })
 
 const tableData = ref<Array<Music>>()
