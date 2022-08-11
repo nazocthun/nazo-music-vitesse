@@ -31,12 +31,29 @@ http.interceptors.response.use(
 )
 
 export const getRequest = (url: string, params = {}) => {
-  return http.get(
-    url,
-    {
-      params: { ...params, cookie: encodeURIComponent(document.cookie) },
-    },
-  )
+  if (!url.includes('register')) {
+    return http.get(
+      url,
+      {
+        params: {
+          ...params,
+          cookie: encodeURIComponent(document.cookie),
+          realIP: '112.103.118.120',
+        },
+      },
+    )
+  }
+  else {
+    return http.get(
+      url,
+      {
+        params: {
+          ...params,
+          realIP: '112.103.118.120',
+        },
+      },
+    )
+  }
 }
 
 export default http
