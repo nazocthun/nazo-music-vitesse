@@ -10,14 +10,11 @@
 <script setup lang="ts">
 import { storeToRefs } from 'pinia'
 import { loginAnonimous } from './api/login'
-import { useCookieStore } from './store/CookieStore'
 import { useMusicInfoStore } from './store/MusicInfoStore'
 import { useMusicQueueStore } from './store/MusicQueueStore'
 
 const MUSIC_QUEUE_STORE = useMusicQueueStore()
 const MUSIC_INFO_STORE = useMusicInfoStore()
-const COOKIE_STORE = useCookieStore()
-const { cookie } = storeToRefs(COOKIE_STORE)
 const { nowIndex, musicQueue, musicHistory } = storeToRefs(MUSIC_QUEUE_STORE)
 
 MUSIC_QUEUE_STORE.$subscribe((state) => {
@@ -32,24 +29,22 @@ MUSIC_INFO_STORE.$subscribe((state) => {
 
 const bz = ref()
 
-onKeyStroke([' ', 'VK_SPACE', 'kVK_Space'], (e: KeyboardEvent) => {
-  bz.value.spaceDown()
-  e.preventDefault()
+onKeyStroke([' ', 'VK_SPACE', 'kVK_SPACE'], (e: KeyboardEvent) => {
+  const hotsearch = document.getElementById('hotsearch')
+  const suggest = document.getElementById('suggestion')
+  if (!hotsearch && !suggest) {
+    bz.value.spaceDown()
+    e.preventDefault()
+  }
 })
 
 function checkLoginStatus() {
-  // if (document.cookie.length > 1) {
-  //   console.log('loged')
-  //   cookie.value = document.cookie
-  // }
-  // else {
-  loginAnonimous().then((res) => {
-    res.map((item) => {
-      return document.cookie = item
+  const cookie = localStorage.getItem('cookie')
+  if (!cookie) {
+    loginAnonimous().then((res) => {
+      localStorage.setItem('cookie', res)
     })
-  })
-  console.log(`临时cookie: ${document.cookie}`)
-// }
+  }
 }
 
 onMounted(() => {
@@ -61,7 +56,6 @@ onMounted(() => {
   if (storedMusicHistory)
     musicHistory.value = JSON.parse(storedMusicHistory)
 })
-
 </script>
 
 <style>

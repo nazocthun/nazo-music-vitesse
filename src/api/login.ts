@@ -5,10 +5,10 @@ const REQUEST_URL = {
   anonimous: '/register/anonimous',
 }
 
-export const convertloginAnonimous = async (res: AxiosResponse<any>): Promise<string[]> => {
+export const convertloginAnonimous = async (res: AxiosResponse<any>): Promise<string> => {
   const cookie = res.data.cookie
-  const newCookie = cookie.split(';;').map((item: any) => `${item};`)
-  return newCookie
+  // const newCookie = cookie.split(';;').map((item: any) => `${item};`)
+  return cookie
 }
 
 export const loginAnonimous = (params = {}) => {
