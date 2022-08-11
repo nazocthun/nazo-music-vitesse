@@ -1,7 +1,6 @@
 <template>
   <div flex h-16>
-    <div text-2xl text-orange-700 h-full w="200px" flex items-center justify-center font-bold cursor-default
-      select-none>
+    <div text-2xl text-orange-700 h-full w="200px" flex items-center justify-center font-bold cursor-pointer @click="goHome">
       Nazo Music
     </div>
     <div flex h-8 mr-auto ml-8>
@@ -26,6 +25,10 @@ const router = useRouter()
 
 function go(destnation: number) {
   router.go(destnation)
+}
+
+function goHome() {
+  router.push('/')
 }
 </script>
 
