@@ -1,17 +1,18 @@
 import type { AxiosResponse } from 'axios'
 import { getRequest } from '../request'
+import { durationTimeFormat, getCompressedImgUrl } from '@/utils/common'
 
 const REQUEST_URL = {
   search: '/cloudsearch',
   suggest: '/search/suggest',
 }
 
-export const convertSearch = async (res: AxiosResponse<any>): Promise<MusicSearchResult | AlbumSearchResult> => {
+export const convertSearchMusic = async (res: AxiosResponse<any>): Promise<MusicSearchResult> => {
   const data = res.data.result
   if (data.songCount) {
     return {
       songCount: data.songCount,
-      songs: data.songs.map((item: { id: any; name: any; ar: { id: any; name: any }[]; al: { id: any; name: any }; dt: any }) => {
+      songs: data.songs.map((item: { id: any; name: any; ar: { id: any; name: any }[]; al: { id: any; name: any; picUrl: any }; dt: any }) => {
         return {
           id: item.id,
           name: item.name,
@@ -21,27 +22,55 @@ export const convertSearch = async (res: AxiosResponse<any>): Promise<MusicSearc
               name: artist.name,
             }
           }),
+          picUrl: getCompressedImgUrl(item.al.picUrl, 500),
           album: {
             id: item.al.id,
             name: item.al.name,
           },
           duration: item.dt,
+          time: durationTimeFormat(item.dt),
         }
       }),
     }
   }
-  else if (data.albumCount) {
+  else {
     return {
-      albumCount: data.albumCount,
-      albums: data.albums.map((item) => {
-
-      }),
+      songCount: data.songCount,
     }
   }
 }
 
-export const getSearchResult = (params = {}) => {
-  return getRequest(REQUEST_URL.search, params).then(convertSearch)
+export const getSearchMusicResult = (params = {}) => {
+  return getRequest(REQUEST_URL.search, params).then(convertSearchMusic)
+}
+
+export const convertSearchAlbum = async (res: AxiosResponse<any>): Promise<AlbumSearchResult> => {
+  const data = res.data.result
+  if (data.albumCount) {
+    return {
+      albumCount: data.albumCount,
+      albums: data.albums.map((item: { id: any; name: any; picUrl: string; artist: { id: any; name: any } }) => {
+        return {
+          id: item.id,
+          name: item.name,
+          picUrl: getCompressedImgUrl(item.picUrl, 500),
+          artist: {
+            id: item.artist.id,
+            name: item.artist.name,
+          },
+        }
+      }),
+    }
+  }
+  else {
+    return {
+      albumCount: data.albumCount,
+    }
+  }
+}
+
+export const getSearchAlbumResult = (params = {}) => {
+  return getRequest(REQUEST_URL.search, params).then(convertSearchAlbum)
 }
 
 export const convertSearchSuggestFirst = async (res: AxiosResponse<any>): Promise<SearchSuggest> => {
@@ -77,13 +106,13 @@ export const convertSearchSuggestSecond = (res: SearchSuggest): Promise<SearchSu
       name: artistitem.name,
     }
   })
-  data.albums = data.albums?.map((albumitem) => {
+  data.albums = data.albums!.map((albumitem) => {
     return {
       id: albumitem.id,
       name: albumitem.name,
       artist: {
-        id: albumitem.artist.id,
-        name: albumitem.artist.name,
+        id: albumitem.artist!.id,
+        name: albumitem.artist!.name,
       },
     }
   })
