@@ -150,6 +150,7 @@ import { useMusicInfoStore } from '@/store/MusicInfoStore'
 import { useMusicQueueStore } from '@/store/MusicQueueStore'
 import { usePlayStore } from '@/store/PlayStore'
 
+const em = defineEmits(['clear'])
 const MUSIC_INFO_STORE = useMusicInfoStore()
 const MUSIC_QUEUE_STORE = useMusicQueueStore()
 const PLAY_STORE = usePlayStore()
@@ -170,7 +171,6 @@ function handleClick(tab: any) {
   // console.log(tab)
 }
 
-const em = defineEmits(['clear'])
 function clear() {
   if (musicQueue.value.length === 0) {
     ElMessage({
