@@ -2,7 +2,13 @@
   <div>
     <div>
       <ul
-        v-infinite-scroll="loadMore" infinite-scroll-delay="700" grid grid-cols-5 gap-5 items-center list-none pl-0
+        v-infinite-scroll="loadMore" :class="{
+          'grid-cols-5': props.col === 5,
+          'grid-cols-4': props.col === 4,
+          'grid-cols-3': props.col === 3,
+          'grid-cols-2': props.col === 2,
+          'grid-cols-1': props.col === 1,
+        }" infinite-scroll-delay="700" grid gap-5 items-center list-none pl-0
         m-3
       >
         <li v-for="(item, index1) in props.data" :key="index1" text-sm w-full>
@@ -68,6 +74,13 @@ const props = defineProps({
   showTime: {
     default() {
       return true
+    },
+    required: false,
+  },
+  col: {
+    type: Number,
+    default() {
+      return 5
     },
     required: false,
   },
