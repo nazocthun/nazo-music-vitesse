@@ -1,7 +1,6 @@
 <template>
   <div w-180 min-w-50 h-full mx-auto my-0 p-1 box-border flex>
     <audio ref="audio" autoplay />
-    <button @click="log">LOG</button>
     <div flex-1>
       <div flex w-full h="50%" mx-auto my-0 items-center justify-evenly>
         <div cursor-pointer rounded-full hover="bg-orange-700/20" w-8 h-8 @click="prev">
@@ -109,7 +108,7 @@ const MUSIC_INFO_STORE = useMusicInfoStore()
 const MUSIC_QUEUE_STORE = useMusicQueueStore()
 const PLAY_STORE = usePlayStore()
 
-const { currentMusicUrl } = storeToRefs(MUSIC_INFO_STORE)
+const { currentMusicUrl, currentMusicTime } = storeToRefs(MUSIC_INFO_STORE)
 const { musicQueue, nowIndex } = storeToRefs(MUSIC_QUEUE_STORE)
 const { isMusicChanged, isPlaying, playMode } = storeToRefs(PLAY_STORE)
 
@@ -123,9 +122,6 @@ const { playing, currentTime, duration, volume, ended } = useMediaControls(audio
 
 const audioTime = ref()
 
-function log() {
-  console.log(playing.value, currentTime.value, duration.value, currentMusicUrl.value)
-}
 // 播放控制
 const { getMusicInfo } = usePlay()
 defineExpose({ play, stop })
@@ -239,6 +235,7 @@ watch(currentTime, () => {
   if (isDraging.value)
     return
   audioTime.value = currentTime.value
+  currentMusicTime.value = currentTime.value
 })
 
 function updateTime() {
