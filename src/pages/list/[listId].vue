@@ -57,9 +57,9 @@
 import { onMounted, ref, watch } from 'vue'
 import { onBeforeRouteUpdate } from 'vue-router'
 import useSongList from '@/hooks/useSongList'
-import { getSimilarSongList, getSongListDetail } from '@/api/getSongListInfo'
+import { getSimilarSongList, getSongListDetail } from '@/api/songlistAPI/getSongListInfo'
 import { getSongDetail } from '@/api/getSongDetail'
-import { getUserDetail } from '@/api/getUserName'
+import { getUserDetail } from '@/api/commonAPI/getUserName'
 
 const props = defineProps<{ listId: string }>()
 const loading = ref(true)
