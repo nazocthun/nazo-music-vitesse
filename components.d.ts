@@ -28,6 +28,7 @@ declare module 'vue' {
     Loading: typeof import('element-plus/es')['ElLoadingDirective']
     MainPage: typeof import('./src/components/MainPage/MainPage.vue')['default']
     MusicInfo: typeof import('./src/components/Footer/MusicInfo.vue')['default']
+    MusicLyric: typeof import('./src/components/Lyrics/MusicLyric.vue')['default']
     MusicQueue: typeof import('./src/components/Footer/MusicQueue.vue')['default']
     MusicTable: typeof import('./src/components/Common/MusicTable.vue')['default']
     NavBar: typeof import('./src/components/NavBar/NavBar.vue')['default']

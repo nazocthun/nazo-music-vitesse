@@ -4,15 +4,10 @@
     <PlayControl ref="playControl" />
     <div w="10%">
       <el-tooltip content="播放队列" placement="top" effect="light">
-        <div
-          ref="queueButton"
-          :class="{
-            'queue-delete-before': musicQueueStyle === 'delete',
-            'queue-add-before': musicQueueStyle === 'add',
-          }"
-          mr-24 cursor-pointer flex relative justify-start items-center float-left
-          @click="toggleQueue()"
-        >
+        <div ref="queueButton" :class="{
+          'queue-delete-before': musicQueueStyle === 'delete',
+          'queue-add-before': musicQueueStyle === 'add',
+        }" mr-24 cursor-pointer flex relative justify-start items-center float-left @click="toggleQueue()">
           <span w-8 h-8 i-ic-sharp-queue-music />
           <span w-8>{{ musicQueue.length }}</span>
         </div>
@@ -29,7 +24,6 @@
 <script setup lang="ts">
 import { storeToRefs } from 'pinia'
 import { useMusicQueueStore } from '@/store/MusicQueueStore'
-
 const MUSIC_QUEUE_STORE = useMusicQueueStore()
 
 const { musicQueue, musicQueueStyle } = storeToRefs(MUSIC_QUEUE_STORE)
