@@ -1,5 +1,5 @@
 import usePlay from '@/hooks/usePlay'
-import { getSongDetail } from '@/api/getSongDetail'
+import { getSongDetail } from '@/api/musicAPI/getSongDetail'
 import { useMusicQueueStore } from '@/store/MusicQueueStore'
 import { getSongListDetail } from '@/api/songlistAPI/getSongListInfo'
 
