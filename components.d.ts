@@ -33,7 +33,6 @@ declare module 'vue' {
     NavBar: typeof import('./src/components/NavBar/NavBar.vue')['default']
     PlayControl: typeof import('./src/components/Footer/PlayControl.vue')['default']
     SearchAlbum: typeof import('./src/components/Search/SearchAlbum.vue')['default']
-    SearchArtist: typeof import('./src/components/Search/SearchArtist.vue')['default']
     SearchBox: typeof import('./src/components/NavBar/SearchBox.vue')['default']
     SearchMusic: typeof import('./src/components/Search/SearchMusic.vue')['default']
     SearchSuggest: typeof import('./src/components/NavBar/SearchSuggest.vue')['default']
