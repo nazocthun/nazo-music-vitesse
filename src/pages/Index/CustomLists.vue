@@ -15,7 +15,7 @@
 </template>
 
 <script setup lang="ts">
-import { getSelfMadeSongList } from '@/api/getSongListInfo'
+import { getSelfMadeSongList } from '@/api/songlistAPI/getSongListInfo'
 import useSongList from '@/hooks/useSongList'
 
 const { playSongListById } = useSongList()

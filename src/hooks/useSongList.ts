@@ -1,7 +1,7 @@
 import usePlay from '@/hooks/usePlay'
-import { getSongDetail } from '@/api/getSongDetail'
+import { getSongDetail } from '@/api/musicAPI/getSongDetail'
 import { useMusicQueueStore } from '@/store/MusicQueueStore'
-import { getSongListDetail } from '@/api/getSongListInfo'
+import { getSongListDetail } from '@/api/songlistAPI/getSongListInfo'
 
 export default function useSongList() {
   const MUSIC_QUEUE_STORE = useMusicQueueStore()

@@ -17,7 +17,7 @@
 </template>
 
 <script setup lang="ts">
-import { getNewMusic } from '@/api/getNewMusic'
+import { getNewMusic } from '@/api/indexAPI/getNewMusic'
 
 const activeName = ref('0')
 const params = reactive({

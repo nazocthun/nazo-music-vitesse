@@ -4,12 +4,12 @@
 
 declare module 'vue' {
   export interface GlobalComponents {
-    BannerView: typeof import('./src/components/BannerView.vue')['default']
+    BannerView: typeof import('./src/components/Index/BannerView.vue')['default']
     BottomZone: typeof import('./src/components/Footer/BottomZone.vue')['default']
-    CommentBar: typeof import('./src/components/CommentBar.vue')['default']
-    CommentsView: typeof import('./src/components/CommentsView.vue')['default']
-    CoverLazy: typeof import('./src/components/CoverLazy.vue')['default']
-    CoverView: typeof import('./src/components/CoverView.vue')['default']
+    CommentBar: typeof import('./src/components/Comment/CommentBar.vue')['default']
+    CommentsView: typeof import('./src/components/Comment/CommentsView.vue')['default']
+    CoverLazy: typeof import('./src/components/Common/CoverLazy.vue')['default']
+    CoverView: typeof import('./src/components/Common/CoverView.vue')['default']
     ElCarousel: typeof import('element-plus/es')['ElCarousel']
     ElCarouselItem: typeof import('element-plus/es')['ElCarouselItem']
     ElContainer: typeof import('element-plus/es')['ElContainer']
@@ -28,16 +28,15 @@ declare module 'vue' {
     Loading: typeof import('element-plus/es')['ElLoadingDirective']
     MainPage: typeof import('./src/components/MainPage/MainPage.vue')['default']
     MusicInfo: typeof import('./src/components/Footer/MusicInfo.vue')['default']
-    MusicQueue: typeof import('./src/components/MusicQueue.vue')['default']
-    MusicTable: typeof import('./src/components/MusicTable.vue')['default']
+    MusicQueue: typeof import('./src/components/Footer/MusicQueue.vue')['default']
+    MusicTable: typeof import('./src/components/Common/MusicTable.vue')['default']
     NavBar: typeof import('./src/components/NavBar/NavBar.vue')['default']
     PlayControl: typeof import('./src/components/Footer/PlayControl.vue')['default']
     SearchAlbum: typeof import('./src/components/Search/SearchAlbum.vue')['default']
-    SearchArtist: typeof import('./src/components/Search/SearchArtist.vue')['default']
     SearchBox: typeof import('./src/components/NavBar/SearchBox.vue')['default']
     SearchMusic: typeof import('./src/components/Search/SearchMusic.vue')['default']
     SearchSuggest: typeof import('./src/components/NavBar/SearchSuggest.vue')['default']
-    ShowMore: typeof import('./src/components/ShowMore.vue')['default']
+    ShowMore: typeof import('./src/components/Common/ShowMore.vue')['default']
   }
 }
 

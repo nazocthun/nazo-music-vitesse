@@ -24,7 +24,7 @@
 
 <script setup lang="ts">
 import usePlay from '@/hooks/usePlay'
-import { getSongDetail } from '@/api/getSongDetail'
+import { getSongDetail } from '@/api/musicAPI/getSongDetail'
 const props = defineProps({
   suggestData: {
     default: () => {

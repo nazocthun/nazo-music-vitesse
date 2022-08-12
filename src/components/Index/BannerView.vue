@@ -10,7 +10,7 @@
 
 <script setup lang="ts">
 import { getBanner } from '@/api/indexAPI/getBanner'
-import { getSongDetail } from '@/api/getSongDetail'
+import { getSongDetail } from '@/api/musicAPI/getSongDetail'
 import usePlay from '@/hooks/usePlay'
 
 const banners = ref<Banner[]>([])

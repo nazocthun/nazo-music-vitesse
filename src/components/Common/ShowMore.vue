@@ -1,4 +1,3 @@
-
 <template>
   <div>
     <div v-if="props.showMore && props.more" leading="81px" flex justify-center>

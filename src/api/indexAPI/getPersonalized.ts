@@ -1,6 +1,6 @@
 import type { AxiosResponse } from 'axios'
 import { getRequest } from '../request'
-import { formatDate, getCompressedImgUrl } from '@/utils/common'
+import { formatDate, getCompressedImgUrl, playCountMinimize } from '@/utils/common'
 
 const REQUEST_URL = {
   songlist: '/personalized',
@@ -24,4 +24,24 @@ export const convertPersonalizedSongList = (res: AxiosResponse<any>): Promise<So
 
 export const getPersonalizedSongList = async (params = {}) => {
   return getRequest(REQUEST_URL.songlist, params).then(convertPersonalizedSongList)
+}
+
+export const convertPersonalizedMV = (res: AxiosResponse<any>): Promise<MV[]> => {
+  const mvInfo = res.data.result
+  return mvInfo.map((item: { id: any; name: any; picUrl: string; playCount: number; artistId: any; artistName: any }) => {
+    return {
+      id: item.id,
+      name: item.name,
+      picUrl: getCompressedImgUrl(item.picUrl, 640, 'landscape'),
+      playCount: playCountMinimize(item.playCount),
+      artist: {
+        id: item.artistId,
+        name: item.artistName,
+      },
+    }
+  })
+}
+
+export const getPersonalizedMV = async (params = {}) => {
+  return getRequest(REQUEST_URL.mv, params).then(convertPersonalizedMV)
 }

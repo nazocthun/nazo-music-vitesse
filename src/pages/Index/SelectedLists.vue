@@ -18,7 +18,7 @@
 </template>
 
 <script setup lang="ts">
-import { getSelectedSongList, getSelectedTags } from '@/api/getSongListInfo'
+import { getSelectedSongList, getSelectedTags } from '@/api/songlistAPI/getSongListInfo'
 import useSongList from '@/hooks/useSongList'
 
 const router = useRouter()

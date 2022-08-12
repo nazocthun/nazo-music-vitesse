@@ -1,4 +1,4 @@
-import { getMusicUrl } from '../api/getMusicUrl'
+import { getMusicUrl } from '../api/musicAPI/getMusicUrl'
 import useMusicQueue from './useMusicQueue'
 import { useMusicInfoStore } from '@/store/MusicInfoStore'
 import { usePlayStore } from '@/store/PlayStore'
