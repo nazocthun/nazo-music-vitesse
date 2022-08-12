@@ -1,8 +1,8 @@
 <template>
-  <el-container direction="vertical">
+  <el-container direction="vertical" flex>
     <NavBar class="bg-slate-200" relative items-center />
     <MainPage class="mainpage fixed top-16 bottom-16 w-full" />
-    <BottomZone ref="bz" class="bg-slate-200" fixed bottom-0 h-16 w-full />
+    <BottomZone ref="bz" class="bg-slate-200" fixed bottom-0 h-16 w-full z-999 />
   </el-container>
   <!-- <Footer /> -->
 </template>
