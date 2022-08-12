@@ -6,22 +6,27 @@
         推荐歌单
       </div>
       <CoverView
-        :data="personlizedSongList"
-        :more="false"
-        :show-more="false"
-        @play="playSongListById"
+        :data="personalizedSongList" :more="false" :show-more="false" @play="playSongListById"
         @to="toSongList"
+      />
+      <div m-3 text="xl" font-bold>
+        推荐MV
+      </div>
+      <CoverView
+        :data="personalizedMV" :more="false" :show-more="false" :col="2" :show-time="false" @play="toMV"
+        @to="toMV"
       />
     </div>
   </el-scrollbar>
 </template>
 
 <script setup lang="ts">
-import { getPersonalizedSongList } from '@/api/indexAPI/getPersonalized'
+import { getPersonalizedMV, getPersonalizedSongList } from '@/api/indexAPI/getPersonalized'
 import useSongList from '@/hooks/useSongList'
 
 const router = useRouter()
-const personlizedSongList = ref<SongList[]>([])
+const personalizedSongList = ref<SongList[]>([])
+const personalizedMV = ref<MV[]>([])
 const { playSongListById } = useSongList()
 
 // keep-alive记住滚动条位置
@@ -41,8 +46,16 @@ onActivated(() => scrollBar.value.setScrollTop(currentScrollTop.value))
 onMounted(() => init())
 function init() {
   getPersonalizedSongList({ limit: 10 }).then((res) => {
-    personlizedSongList.value = res
+    personalizedSongList.value = res
   })
+  getPersonalizedMV().then((res) => {
+    console.log(res)
+    personalizedMV.value = res
+  })
+}
+
+function toMV(id: number) {
+  router.push(`/mv/${id}`)
 }
 
 function toSongList(id: number) {
