@@ -30,9 +30,12 @@
           <CommentsView :id="mvId" :type="1" />
         </div>
       </div>
-      <div m-5 w="40%">
+      <div m-5 w="30%">
         <div text-xl font-bold m-3>
           相似MV
+        </div>
+        <div>
+          <CoverView :data="simiMVsData" :show-more="false" :col="1" :show-time="false" @play="toMV" @to="toMV" />
         </div>
       </div>
     </div>
@@ -43,11 +46,13 @@
 import { storeToRefs } from 'pinia'
 import { getMVDetail, getMVUrl } from '@/api/mvAPI/getMVDetail'
 import { usePlayStore } from '@/store/PlayStore'
+import { getSimiMVs } from '@/api/mvAPI/getSimiMVs'
 
 const props = defineProps<{ mvId: string }>()
 const mvId = ref()
 const loading = ref(true)
 const mvDetail = ref<MV>({} as MV)
+const simiMVsData = ref<MV[]>([])
 const mvUrl = ref()
 
 const PLAY_STORE = usePlayStore()
@@ -87,6 +92,14 @@ async function init() {
   }).then(() => {
     loading.value = false
   })
+  await getSimiMVs({ mvid: mvId.value }).then((res) => {
+    simiMVsData.value = res
+  })
+}
+
+const router = useRouter()
+function toMV(id: number) {
+  router.push(`/mv/${id}`)
 }
 
 // keep-alive记住滚动条位置
