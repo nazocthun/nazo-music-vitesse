@@ -9,3 +9,8 @@ declare interface Banner {
   targetType: number
   targetId: number
 }
+
+declare interface Lyric {
+  time: number
+  content: string
+}
